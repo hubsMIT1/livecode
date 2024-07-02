@@ -1,0 +1,106 @@
+question: {
+    {
+        "title":"Four Sum",
+       "description": "This question has the an array. You have to find the sum of the Four element that is equal to k",
+            "difficulty_level": "Hard",
+            "average_time_to_solve": 40,
+           "image": ["https://livecode.com/topic/6f229cb8-1177-43bd-97f3-4d0eb7794196/image/1"],
+            "topic":["6f229cb8-1177-43bd-97f3-4d0eb7794196","f465c449-3b9b-45d2-bcb0-403d651a816d"]
+            
+      }
+}
+
+"title":"Three Sum",
+"description": "It is the one of the important topic in the Data SA",
+"difficulty_level":"Medium",
+"image": "https://livecode.com/topic/6f229cb8-1177-43bd-97f3-4d0eb7794196/image/1",
+"average_time_to_solve":13,
+"topic_id":["6f229cb8-1177-43bd-97f3-4d0eb7794196"]
+
+{
+"title":"Four Sum",
+"description": "This question has the an array. You have to find the sum of the Four element that is equal to k",
+    "difficulty_level": "Hard",
+    "average_time_to_solve": 40,
+    "image": ["https://livecode.com/topic/6f229cb8-1177-43bd-97f3-4d0eb7794196/image/1"],
+    "topic_id":["6f229cb8-1177-43bd-97f3-4d0eb7794196"]
+    
+}
+// ------------------------------
+signup
+
+{
+    "fullName":"Shiva",
+    "username":"shivay",
+    "password":"12345678",
+    "email":"shivay@gmail.com",
+
+}
+
+login
+{
+    "credential":"shivay",
+    "password":"12345678"
+}
+
+topic 
+id {
+    ["e41558c5-f718-4221-9864-35269fce0f22","28b49f2d-5ea1-4e0c-a366-1f87946afcbd"]
+}
+
+{
+    "title":"Dynamic Programming",
+    "description":"One of the important topic of DSA",
+    "image":"http://livecode.com/topic/image/1"
+}
+
+sheet 
+id = ["f106c635-fa70-4467-bdd3-3be9fb3ff761","c294d3b5-9be9-45d7-a8fd-443796e496d2"]
+{
+    "title":"Blind Sheet",
+    "description":"One of the important sheet of DSA",
+    "image":"http://livecode.com/sheet/image/1"
+}
+
+Question
+{
+    "title":"Four Sum",
+   "description": "This question has the an array. You have to find the sum of the Four element that is equal to k",
+        "difficulty_level": "Hard",
+        "average_time_to_solve": 40,
+       "image": ["https://livecode.com/topic/6f229cb8-1177-43bd-97f3-4d0eb7794196/image/1"],
+        "topic":["6f229cb8-1177-43bd-97f3-4d0eb7794196","f465c449-3b9b-45d2-bcb0-403d651a816d"]
+}
+
+Add question in Sheet
+
+{
+    question:["id",""]
+}
+
+Schedule
+
+//title..?
+{
+
+    "level":"Easy",
+    "topic":[""],
+    "start_time":1717223322,
+    "join_link":"https://livecode.com/dadadfasdfasdfasdf"
+    
+}
+
+get by time 
+time = {start: new Date('1970-01-01T' + time.toString() + 'Z'),end: new Date('1970-01-01T' + time.toString() + 'Z')+1}
+
+get by date 
+date = '2024-06-01'
+const parsedDate = parseISO(date.toString());
+date ={start:startOfDay(parsedDate),end:endOfDay(parsedDate)}
+
+get by datetime
+
+datetime = '2024-06-01T06:28:42.000Z'
+const parsedDateTime = parseISO(dateTime.toString());
+
+datetime = parsedDateTime

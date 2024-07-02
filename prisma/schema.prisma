@@ -1,0 +1,255 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  user_id      String   @id @default(uuid()) //@id @default(autoincrement())
+  email        String   @unique
+  username     String   @unique
+  fullName     String
+  password     String
+  role         String?  @default("user")
+  socialLinks  String[] @db.VarChar(255)
+  about        String?
+  profileImage String?
+
+  point          Point[] // one2many
+  solution       Solution[]
+  owned_schedule Schedule[]
+
+  @@map("users")
+}
+
+model Point {
+  point_id   String @id @default(uuid())
+  point      Int
+  point_type String
+  user      User   @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  user_id     String
+
+  @@map("points")
+}
+
+model Topic {
+  topic_id    String          @id @default(uuid())
+  title       String          @unique
+  description String?
+  image       String?
+  question   TopicQuestion[]
+  tag        TopicTag[]
+  schedule   ScheduleTopic[]
+
+  @@map("topics")
+}
+
+model Sheet {
+  sheet_id    String          @id @default(uuid())
+  title       String          @unique
+  description String?
+  image       String?
+  question   SheetQuestion[]
+  tag        SheetTag[]
+
+  @@map("sheets")
+}
+
+model Question {
+  question_id           String          @id @default(uuid())
+  title                 String          @unique
+  description           String
+  difficulty_level      String
+  average_time_to_solve Int?
+  image                Image[]
+  solution            Solution[]
+  topic                TopicQuestion[]
+  sheet                SheetQuestion[]
+  tag                  QuestionTag[]
+  scheduel              Schedule[]
+
+  @@map("questions")
+}
+
+model TopicQuestion {
+  topic_id    String
+  question_id String
+  topic       Topic    @relation(fields: [topic_id], references: [topic_id], onDelete: Cascade)
+  question    Question @relation(fields: [question_id], references: [question_id], onDelete: Cascade)
+
+  @@id([topic_id, question_id])
+  @@map("topic_questions")
+}
+
+model SheetQuestion {
+  sheet_id    String
+  question_id String
+  sheet       Sheet    @relation(fields: [sheet_id], references: [sheet_id], onDelete: Cascade)
+  question    Question @relation(fields: [question_id], references: [title], onDelete: Cascade)
+
+  @@id([sheet_id, question_id])
+  @@map("sheet_questions")
+}
+
+// create it for the uni (for that has to have one common column name(id))
+model Image {
+  image_id   String          @id @default(uuid())
+  image_url  String
+  question_id   String
+  image_type String
+  question  Question @relation(fields: [question_id], references: [question_id], onDelete: Cascade)
+
+  @@map("images")
+}
+
+
+// model QuestionImage {
+//   ques_image_id String   @id @default(uuid())
+//   question_id   String
+//   image_id      String
+//   question      Question @relation(fields: [question_id], references: [question_id])
+//   image         Image    @relation(fields: [image_id], references: [image_id])
+
+//   @@map("question_images")
+// }
+
+// ...? find good method for m2m
+
+// testcases.. 
+// how to store in txt file format..? or value
+
+model Solution {
+  solution_id       String   @id @default(uuid())
+  solution_text     String
+  submission_status String
+  created_at        DateTime @default(now())
+  question_id       String
+  user_id           String
+
+  user              User     @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  question          Question @relation(fields: [question_id], references: [question_id], onDelete: Cascade)
+
+  @@map("solutions")
+}
+
+// model Contest {
+//   contest_id  String   @id @default(uuid())
+//   title       String
+//   start_time  DateTime
+//   end_time    DateTime
+//   question_id String
+//   created_at  DateTime @default(now())
+
+//   questions      Question       @relation(fields: [question_id], references: [question_id], onDelete: Cascade)
+//   peer_reviewer PeerReviewer[]
+//   feedback       Feedback[]
+
+//   @@map("contests")
+// }
+
+// model PeerReviewer {
+//   peer_reviewer_id String  @id @default(uuid())
+//   user_id          String
+//   contest_id       String
+//   time_taken       Int
+
+//   contest          Contest @relation(fields: [contest_id], references: [contest_id], onDelete: Cascade)
+//   user             User    @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+
+//   @@map("peer_reviewers")
+// }
+
+model Feedback {
+  feedback_id            String @id @default(uuid())
+  problem_solving_rating Int
+  coding_rating          Int
+  communication_rating   Int
+  peer_strengths         String
+  areas_for_improvement  String?
+  interviewer_rating     Int
+  topic_rating           Int
+  interviewee            String //userid
+
+  schedule    Schedule @relation(fields: [schedule_id], references: [schedule_id], onDelete: Cascade)
+  schedule_id String
+  // peer_reviewer     PeerReviewer @relation(fields: [peer_reviewer_id], references: [peer_reviewer_id])
+
+  @@map("feedback")
+}
+
+// tag
+
+model QuestionTag {
+  question_id String
+  tag_id      String
+  question    Question @relation(fields: [question_id], references: [question_id])
+  tag         Tag      @relation(fields: [tag_id], references: [tag_id], onDelete: Cascade)
+
+  @@id([question_id, tag_id])
+  @@map("question_tags")
+}
+
+model SheetTag {
+  sheet_id String
+  tag_id   String
+  sheet    Sheet  @relation(fields: [sheet_id], references: [sheet_id], onDelete: Cascade)
+  tag      Tag    @relation(fields: [tag_id], references: [tag_id], onDelete: Cascade)
+
+  @@id([sheet_id, tag_id])
+  @@map("sheet_tags")
+}
+
+model TopicTag {
+  topic_id String
+  tag_id   String
+  topic    Topic  @relation(fields: [topic_id], references: [topic_id], onDelete: Cascade)
+  tag      Tag    @relation(fields: [tag_id], references: [tag_id], onDelete: Cascade)
+
+  @@id([topic_id, tag_id])
+  @@map("topic_tags")
+}
+
+model Tag {
+  tag_id       String        @id @default(uuid())
+  title        String        @unique
+  created_at   DateTime      @default(now())
+  questionTag QuestionTag[]
+  sheetTag    SheetTag[]
+  topicTag    TopicTag[]
+
+  @@map("tags")
+}
+
+//SCHEDULING 
+model Schedule {
+  schedule_id   String   @id @default(uuid())
+  level         String
+  join_link     String
+  start_time    DateTime
+  created_at    DateTime @default(now())
+  owner_id      String
+  allowed_users String[]
+
+  status        String   @default("Incomplete") //started, completed
+  end_time      DateTime? 
+  question_id   String?
+  
+  owner         User     @relation(fields: [owner_id], references: [user_id], onDelete: Cascade)
+  question      Question? @relation(fields: [question_id],references: [question_id], onDelete: Cascade)
+  topic         ScheduleTopic[]
+  feedback      Feedback[]
+  @@map("schedules")
+}
+
+model ScheduleTopic {
+  topic_id  String
+  schedule_id String
+  schedule  Schedule @relation(fields: [schedule_id], references: [schedule_id],onDelete: Cascade)
+  topic      Topic   @relation(fields: [topic_id],references: [topic_id], onDelete: Cascade)
+
+  @@id([topic_id, schedule_id])
+  @@map("schedule_topic")
+}
