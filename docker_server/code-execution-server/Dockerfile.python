@@ -1,0 +1,10 @@
+FROM python:3.9-slim
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY run-scripts/run-python.sh /usr/local/bin/run-python
+RUN chmod +x /usr/local/bin/run-python
+
+WORKDIR /code
