@@ -38,7 +38,7 @@ npx tsc
 ### Run Local frontend
 ```
 cd livecode
-pnpm add
+pnpm install
 pnpm run dev
 ```
 
