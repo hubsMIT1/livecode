@@ -1,0 +1,6 @@
+FROM rust:1.53-slim
+
+COPY run-scripts/run-rust.sh /usr/local/bin/run-rust
+RUN chmod +x /usr/local/bin/run-rust
+
+WORKDIR /code

@@ -1,0 +1,8 @@
+FROM node:14-slim
+
+RUN npm install -g typescript ts-node
+
+COPY run-scripts/run-typescript.sh /usr/local/bin/run-typescript
+RUN chmod +x /usr/local/bin/run-typescript
+
+WORKDIR /code

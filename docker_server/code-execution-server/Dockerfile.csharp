@@ -1,0 +1,6 @@
+FROM mcr.microsoft.com/dotnet/sdk:5.0
+
+COPY run-scripts/run-csharp.sh /usr/local/bin/run-csharp
+RUN chmod +x /usr/local/bin/run-csharp
+
+WORKDIR /code
