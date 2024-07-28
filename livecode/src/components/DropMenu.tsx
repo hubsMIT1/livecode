@@ -1,6 +1,7 @@
 import React, { useState, useEffect,useRef } from 'react';
 import Topics from './Topics';
 import { dataStructuresTopics } from '@/api/constants';
+import { TopicData } from '@/lib/interfaces';
 
 interface MenuItem {
   label: string;
@@ -8,8 +9,8 @@ interface MenuItem {
 }
 
 interface DropdownMenuProps {
-  items?: MenuItem[];
-  isTopic:true | false;
+  items?: TopicData[];
+  isTopic?:true | false;
   title?:string
 }
 
@@ -18,8 +19,8 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ items,isTopic,title="Topics
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleItemClick = (item:MenuItem) => {
-    item.onClick(item.label);
-    console.log('Selected item:', onClick.toString());
+    item.onClick();
+    console.log('Selected item:', item.toString());
     setIsOpen(false);
   };
   useEffect(() => {
@@ -28,12 +29,13 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ items,isTopic,title="Topics
         setIsOpen(false);
       }
     }
-
+    
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [dropdownRef]);
+
   const handleTopics = (topics: string[]) => {
     console.log(topics);
     // setScheduleRecord(prevRecord => ({
@@ -44,58 +46,39 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ items,isTopic,title="Topics
 
   return (
     <div className="relative" ref={dropdownRef}>
-      <div className="flex justify-end overflow-visible items-center rounded-md border bg-white">
-          <p 
-          onClick={() => setIsOpen(!isOpen)}
-          className="border-e px-4 py-2 text-sm/none text-gray-600 hover:bg-gray-50 hover:text-gray-700"
+      <button className="flex justify-end overflow-visible py-2 px-4 items-center rounded-md text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 "
+        onClick={() => setIsOpen(!isOpen)}
+        type='button'
         >
          {title}
-        </p>
-        <button
-          className="h-full p-2 text-gray-600 hover:bg-gray-50 hover:text-gray-700"
-          onClick={() => setIsOpen(!isOpen)}
-        >
+        
           <span className="sr-only">Menu</span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </button>
-      </div>
+          <svg className={`-mr-1 ml-1.5 w-5 h-5 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path clipRule="evenodd" fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+        </svg>
+      </button>
       {
       isOpen && (
-        <div
-          className="absolute end-0 z-10 mt-2 w-60 p-3 overflow-auto no-scrollbar max-h-[400px] divide-y divide-gray-100 rounded-md border border-gray-100 bg-white shadow-lg"
-          role="menu"
-        >
+       
+          <div className="absolute w-40 md:w-80 md:end-0 z-10 overflow-auto no-scrollbar max-h-[400px]  rounded-md shadow-lg dark:bg-gray-700 bg-white"
+          role="menu">
           { isTopic?
-            <Topics topics={dataStructuresTopics} handleTopics={handleTopics} isDrop={true}/>
-            : (<div
-            className="absolute end-0 z-10 mt-2 w-56 rounded-md border border-gray-100 bg-white shadow-lg"
-            role="menu"
-          >
-            <ul className="p-2">
-              {items.map((item,index)=>(
+            <Topics handleTopics={handleTopics} isDrop={true}/>
+  
+            : 
+            <ul className="p-2 grid grid-col-2">
+              {items?.map((item,index)=>(
               <li
-                key={item+index}
-                className="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+                key={item?.title+index}
+                className="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700 w-full"
                 role="menuitem"
               >
-                {item}
+                {item.title}
               </li>
               ))}
            </ul>
-           </div>)
           }
-        </div>
+          </div>
       )}
       </div>)}
 

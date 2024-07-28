@@ -92,9 +92,9 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   }, [socket]);
 
-  const connectSocket = (username: string,roomId:string) => {
+  const connectSocket = (token: string,roomId:string) => {
     const newSocket = io(API_URL, {
-      auth: { token: username,roomId:roomId},
+      auth: { token: token,roomId:roomId},
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
@@ -122,8 +122,8 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     console.warn("contestUser changed state or invoke")
     // console.log(token)
     console.log(user.username)
-    if (user.username && !socket && roomId) {
-      connectSocket(user.username,roomId);
+    if (token && !socket && roomId) {
+      connectSocket(token,roomId);
     }
     console.log("socket page on contestUser")
     return () => {
@@ -133,7 +133,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       disconnectSocket();
       
     };
-  }, [user,roomId]);
+  }, [token,roomId]);
 
   // useEffect(() => {
   //   console.warn("contestUser changed state or invoke")

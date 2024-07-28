@@ -16,7 +16,7 @@ const CodeOutput: React.FC<CodeOutputProps> = ({
   expectedOutput,
 }) => {
   return (
-    <div className="bg-white shadow-md rounded-lg p-6">
+    <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
       <h2 className="text-2xl font-bold mb-4">{title}</h2>
       <div className="mb-4">
         <span className="text-gray-600">Runtime:</span> {runtime}
@@ -49,7 +49,7 @@ interface CodeBlockProps {
 
 const CodeBlock: React.FC<CodeBlockProps> = ({ code }) => {
   return (
-    <pre className="bg-gray-100 rounded-md p-4 overflow-auto mb-4">
+    <pre>
       <code>{code}</code>
     </pre>
   );

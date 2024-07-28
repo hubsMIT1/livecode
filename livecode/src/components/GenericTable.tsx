@@ -1,10 +1,14 @@
 // components/GenericTable.tsx
-import React, { useState, useMemo } from 'react';
-import { Column, FilterOption, Topic } from '../lib/interfaces';
+import React, { useState, useMemo, useEffect } from 'react';
+import { Column, FilterOption, Topic, TopicData } from '../lib/interfaces';
 import Search from '@/components/Search';
 import Filter from '@/components/Filter';
 import Pagination from '@/components/Pagination';
 import DropdownMenu from '@/components/DropMenu';
+import ListSkeleton from './ListSkelton';
+import { topicState } from "@/state/TSQState";
+import { useRecoilState } from 'recoil';
+import { serviceApiAction } from "@/lib/endUserServicesApi";
 
 interface GenericTableProps<T> {
   initialData: T[];
@@ -20,6 +24,7 @@ interface GenericTableProps<T> {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  isLoading:boolean;
 }
 
 function GenericTable<T extends { question_id?: string,schedule_id?:string}>({
@@ -29,34 +34,43 @@ function GenericTable<T extends { question_id?: string,schedule_id?:string}>({
   itemsPerPage = 10,
   renderCell,
   getRowClassName,
-  searchFields = ['title' as keyof T],
+  searchFields = ['title' as keyof T,'question' as keyof T,'topic' as keyof T],
   filterField = 'difficulty' as keyof T,
   topicDrop,
   topicDropItem,
   currentPage,
   totalPages,
   onPageChange,
+  isLoading,
 }: GenericTableProps<T>) {
   // const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  // const [isLoading,setIsLoading] = useState(false);
 
   const filteredData = useMemo(() => {
     return initialData.filter((item) => {
       const matchesSearch = searchFields.some(field => 
         String(item[field]).toLowerCase().includes(searchTerm.toLowerCase())
       );
-      const matchesFilter = selectedFilters.length === 0 || 
+      let matchesFilter = selectedFilters.length === 0 || 
         selectedFilters.includes(String(item[filterField]).toLowerCase());
+      
+      // if(filterField==='start_time'){
+      //   if(selectedFilters.includes('upcoming')){
+      //     matchesFilter = 
+      //   }
+      // }
       return matchesSearch && matchesFilter;
     });
   }, [initialData, searchTerm, selectedFilters, searchFields, filterField]);
 
+
   // const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   const paginatedData = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    return filteredData.slice(startIndex, startIndex + itemsPerPage);
+    // const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredData //.slice(startIndex, startIndex + itemsPerPage);
   }, [filteredData, currentPage, itemsPerPage]);
 
   const handlePageChange = onPageChange;
@@ -64,6 +78,8 @@ function GenericTable<T extends { question_id?: string,schedule_id?:string}>({
     setSearchTerm(e.target.value);
     // setCurrentPage(1);
   };
+
+  
   const handleFilterChange = (filterId: string) => {
     setSelectedFilters(prev =>
       prev.includes(filterId) ? prev.filter(id => id !== filterId) : [...prev, filterId]
@@ -72,14 +88,14 @@ function GenericTable<T extends { question_id?: string,schedule_id?:string}>({
   };
 
   return (
-    <section className="p-3 sm:p-5">
+    <section className="p-3 sm:p-5 ">
       <div className="mx-auto max-w-screen-xl ">
         <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
           <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
             <div className="w-full md:w-1/2">
               <Search searchTerm={searchTerm} onSearchChange={handleSearchChange} />
             </div>
-            <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+            <div className="w-full md:w-auto flex  flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
             <div className="flex items-center space-x-3 w-full md:w-auto">
             <Filter
               filterOptions={filterOptions}
@@ -87,13 +103,13 @@ function GenericTable<T extends { question_id?: string,schedule_id?:string}>({
               onFilterChange={handleFilterChange}
             />
             {/* <FilterInput /> */}
-             {topicDrop && <DropdownMenu items={topicDropItem} />}
+             {topicDrop && <DropdownMenu isTopic={true} />}
               {/* <DropdownMenu items={menuItems} /> */}
 
             </div>
           </div>
           </div>
-          <div className="overflow-x-auto">
+          <div className={`overflow-x-auto ${!isLoading ? `min-h-[200px]` : ``}`}>
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
@@ -102,8 +118,10 @@ function GenericTable<T extends { question_id?: string,schedule_id?:string}>({
                   ))}
                 </tr>
               </thead>
+               
               <tbody>
-                {paginatedData.map((item) => (
+
+               { paginatedData.map((item) => (
                   <tr key={item?.question_id || item.schedule_id} className={`border-b dark:border-gray-700 ${getRowClassName ? getRowClassName(item) : ''}`}>
                     {columns.map((column) => (
                       <td key={`${item?.question_id || item.schedule_id}-${column.key}`} className="px-4 py-3">
@@ -111,15 +129,22 @@ function GenericTable<T extends { question_id?: string,schedule_id?:string}>({
                       </td>
                     ))}
                   </tr>
-                ))}
+                ))
+              }
               </tbody>
+
             </table>
+
           </div>
+          {
+                isLoading ?
+                <ListSkeleton /> :
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={handlePageChange}
           />
+}
         </div>
       </div>
     </section>

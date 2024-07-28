@@ -4,9 +4,8 @@ import { dataStructuresTopics, difficultyOptions, unavailableTimes } from "@/api
 import Topics from "./Topics";
 import DifficultySelection from "./DifficultyLevel";
 import BottonUI from "./Button";
-import { ScheduleRecord, updateContestProps } from "@/lib/interfaces";
+import { ScheduleRecord, TopicData, updateContestProps } from "@/lib/interfaces";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { topicState } from "@/state/TSQState";
 import { serviceApiAction } from "@/lib/endUserServicesApi";
 import { Slide, ToastContainer, toast } from "react-toastify";
 import ButtonSkeleton from "./ButtonSkelton";
@@ -23,26 +22,12 @@ const TextContent: React.FC = () => {
       start_time:0,
     }
     const [newScheduleRecord, setScheduleRecord] = useState<ScheduleRecord>(initialSchedule);
-    const [topics,setTopics] = useRecoilState(topicState);
+    // const [topics,setTopics] = useRecoilState(topicState);
     const [isLoading,setIsLoading] = useState(false);
-    const {getAllTopics,createContest,updateContest} = serviceApiAction();
+    const {createContest,updateContest} = serviceApiAction();
     const [editId,setEditId] = useState<string | undefined>(undefined)
 
-    useEffect(()=>{
-      const getTopics = async () =>{
-        console.log(topics)
-        if(topics.length===0){
-          const res = await getAllTopics(1,100);
-          if(res.success){
-            // setTopics()
-            // console.log(res.data?.data)
-            setTopics(res?.data?.data!)
-          }
-          console.log(res)
-        }
-      }
-      getTopics();
-    },[])
+  
     // console.log(topics)
     
 
@@ -159,7 +144,7 @@ const TextContent: React.FC = () => {
             {/* Add your form or additional content here */}
             <EventDetails unavailableTimes={unavailableTimes} handleSchedule={handleSchedule} />
             <div className=" mt-6 border-t"></div>
-            <Topics topics={topics} handleTopics={handleTopics}/>
+            <Topics handleTopics={handleTopics}/>
             <div className=" mt-6 border-t"></div>
             <DifficultySelection options={difficultyOptions} handleDifficultyLevel={handleDifficultyLevel}/>
             <div className=" mt-6 flex justify-end">

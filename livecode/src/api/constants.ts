@@ -341,7 +341,9 @@ export const options = [
     { label: "Blog", link: "/blog" },
     {label:'Pre Contest',link:'/contest/pre/room1'},
     {label:'Contest',link:'/contest/live/room1'}, //check live or not
-    {label:'Feedback',link:'/contest/feedback/123'}
+    {label:'Feedback',link:'/contest/feedback/123'},
+    {label:'Admin',link:'/admin/create'}
+
  
   ];
 

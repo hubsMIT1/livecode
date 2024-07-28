@@ -14,7 +14,7 @@ const Header: React.FC = () => {
   const navItems = [
     { label: "Problems", link: "/problems" },
     { label: "Your Session", link: "/schedules" },
-    { label: "Connect via Link", link: "/contest/link" },//enter link input add
+    { label: "Connect via Link", link: "/join-vai-link" },//enter link input add
     { label: "Blog", link: "/blog" },
   ];
 

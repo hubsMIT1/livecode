@@ -11,13 +11,13 @@ import { QuestionRecord, TopicRecord } from "@/lib/interfaces";
 import { serviceApiAction } from "@/lib/endUserServicesApi";
 import { Slide, ToastContainer, toast } from 'react-toastify';
 import ButtonSkeleton from "../ButtonSkelton";
-import { topicState } from "@/state/TSQState";
+// import { topicState } from "@/state/TSQState";
 import { useRecoilState } from "recoil";
 import Topics from "../Topics";
 
 const CreateTSP: React.FC = () => {
   const { createQuestion, getAllTopics, createTopic, createSheet } = serviceApiAction()
-  const [topics,setTopics] = useRecoilState(topicState);
+  // const [topics,setTopics] = useRecoilState(topicState);
 
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({
@@ -44,22 +44,22 @@ const CreateTSP: React.FC = () => {
     image: undefined,
   });
 
-  useEffect(()=>{
-    const getTopics = async () =>{
-      console.log(topics)
-      if(topics.length===0){
-        const res = await getAllTopics(1,100);
-        if(res.success){
-          // setTopics()
-          // console.log(res.data?.data)
-          console.log(res?.data);
-          setTopics(res?.data?.data!)
-        }
-        console.log(res)
-      }
-    }
-    getTopics();
-  },[])
+  // useEffect(()=>{
+  //   const getTopics = async () =>{
+  //     console.log(topics)
+  //     if(topics.length===0){
+  //       const res = await getAllTopics(1,100);
+  //       if(res.success){
+  //         // setTopics()
+  //         // console.log(res.data?.data)
+  //         console.log(res?.data);
+  //         setTopics(res?.data?.data!)
+  //       }
+  //       console.log(res)
+  //     }
+  //   }
+  //   getTopics();
+  // },[])
 
   const handleProblemData = (e: React.ChangeEvent<HTMLInputElement>) => {
     // console.log(e)
@@ -321,7 +321,7 @@ const CreateTSP: React.FC = () => {
             problemData={problemData}
             setProblemData={setProblemData}
           /> */}
-           <Topics topics={topics} handleTopics={handleTopics}/>
+           <Topics handleTopics={handleTopics}/>
           <div className="flex justify-end">
             {/* <></> */}
             {/* <></> */}

@@ -30,7 +30,7 @@ const Filter: React.FC<FilterProps> = ({ filterOptions, selectedFilters, onFilte
   };
 
   return (
-    <div className="flex items-center space-x-3 " ref={dropdownRef}>
+    <div className="relative " ref={dropdownRef}>
       <button
         onClick={toggleDropdown}
         className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
@@ -45,9 +45,10 @@ const Filter: React.FC<FilterProps> = ({ filterOptions, selectedFilters, onFilte
         </svg>
       </button>
       {isOpen && (
-        <div className="absolute top-[100px] md:top-[10%] z-10 mt-2 w-48 p-3 bg-white rounded-lg shadow dark:bg-gray-700">
-          <h6 className="mb-3 text-sm font-medium text-gray-900 dark:text-white">Filter</h6>
-          <ul className="space-y-2 text-sm">
+        <div className="absolute lg:end-0 z-10 w-[200px] overflow-auto no-scrollbar max-h-[200px] rounded-md shadow-lg dark:bg-gray-700 bg-white items-center w-full p-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+          {/* <div className=''> */}
+          {/* <h6 className="mb-3 text-sm font-medium text-gray-900 dark:text-white">Filter</h6> */}
+          <ul className="text-sm overflow-auto">
             {filterOptions.map((option) => (
               <li key={option.id} className="flex items-center">
                 <input
@@ -55,7 +56,7 @@ const Filter: React.FC<FilterProps> = ({ filterOptions, selectedFilters, onFilte
                   type="checkbox"
                   checked={selectedFilters.includes(option.id)}
                   onChange={() => onFilterChange(option.id)}
-                  className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                  className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 m-1 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                 />
                 <label htmlFor={option.id} className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
                   {option.label}
@@ -63,7 +64,8 @@ const Filter: React.FC<FilterProps> = ({ filterOptions, selectedFilters, onFilte
               </li>
             ))}
           </ul>
-        </div>
+          </div>
+        // </div>
       )}
     </div>
   );

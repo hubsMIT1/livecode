@@ -26,7 +26,11 @@ export const serviceApiAction = () => {
   };
   const getAllContest = async (page?:number,limit?:number): Promise<ResponseProps> => {
     const res = await handleCalledApi("GET", `end-user-service/schedules?page=${page}&limit=${limit}`);
-    return res;
+    if(res.errors){
+      console.log(res?.errors?.message);
+      return res;
+    }
+    return res.data;
   };
   const getContestById = async (id: string): Promise<ScheduleResponseProps> => {
     const res = await handleCalledApi("GET", `end-user-service/schedule/${id}`);
@@ -72,7 +76,10 @@ export const serviceApiAction = () => {
   };
   const getAllTopics = async (page?:number,limit?:number): Promise<ResponseProps> => {
     const res = await handleCalledApi("GET", `service/topics?page=${page}&limit=${limit}}`);
-    return res;
+    if(res.errors){
+      return res;
+    }
+    return res.data;
   };
   const deleteTopic = async (id: string): Promise<ResponseProps> => {
     const res = await handleCalledApi("DELETE", `service/topic/${id}`);
@@ -118,7 +125,13 @@ export const serviceApiAction = () => {
   };
   const getAllQuestions = async (page?:number,limit?:number): Promise<ResponseProps> => {
     const res = await handleCalledApi("GET", `service/questions?page=${page}&limit=${limit}`);
-    return res;
+    if(res.success){
+      // console.log(res.data)
+      return res.data;
+    }
+    else {
+      return res
+    }
   };
   const deleteQuestion = async (id: string): Promise<ResponseProps> => {
     const res = await handleCalledApi("DELETE", `service/question/${id}`);

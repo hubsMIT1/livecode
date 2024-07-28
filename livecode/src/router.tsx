@@ -14,6 +14,8 @@ import Login from './components/auth/SignIn.tsx';
 import ProtectedRoute from './components/auth/ProtectRoute.tsx';
 import Profile from './components/auth/Profile.tsx';
 import CreateTSP from './components/admin/CreateServices.tsx';
+import SolveProblem from './pages/ProblemDetails.tsx';
+import ConnectViaLink from './components/ConnectViaLink.tsx';
 
 const router = createBrowserRouter([
   {
@@ -54,6 +56,14 @@ const router = createBrowserRouter([
         element: <ProtectedRoute><Profile /></ProtectedRoute>,
       },
       {
+        path:'/problems/:slug',
+        element:<SolveProblem />
+      },
+      {
+        path: '/admin/create',
+        element: <ProtectedRoute><CreateTSP /></ProtectedRoute>,
+      },
+      {
         path: '/login',
         element: <Login />,
       },
@@ -62,8 +72,8 @@ const router = createBrowserRouter([
         element: <Registration />,
       },
       {
-        path:'admin/create',
-        element:<CreateTSP />
+        path:'/join-vai-link',
+        element:<ConnectViaLink />
       },
       {
         path: '*',

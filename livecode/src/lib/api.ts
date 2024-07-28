@@ -1,20 +1,18 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 import { Feedback, Question, QuestionRecord, ResponseProps, Schedule, ScheduleRecord, ScheduleSession, Sheet, Solution, TopicData, TopicRecord, getAllResponse } from './interfaces';
-
-const BASE_URL = 'http://localhost:3001/api/';
-const GITHUB_PROBLEM_PATH = 'https://raw.githubusercontent.com/hubsMIT1/livecode/master/problems/';
+// console.log(import.meta.env.VITE_BASE_URL)
+const BASE_URL = import.meta.env.VITE_BASE_URL //'http://localhost:3001/api/';
+const GITHUB_PROBLEM_PATH = import.meta.env.VITE_GITHUB_PROBLEM_PATH // 'https://raw.githubusercontent.com/hubsMIT1/livecode/master/problems/';
 
 // Create a custom axios instance
 const customAxios = axios.create({
   baseURL: BASE_URL,
 });
-
-// Refresh token function
 const generateRefreshToken = async () => {
   try {
     const refresh = localStorage.getItem('refresh_token');
-    const res =  await customAxios.get(`users/auth/refresh_token`, {
+    const res = await customAxios.get(`users/auth/refresh_token`, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${refresh}`,
@@ -22,25 +20,30 @@ const generateRefreshToken = async () => {
     });
     const data = res.data;
     console.log(data);
-    localStorage.setItem('access_token',data.access_token);
+    localStorage.setItem('access_token', data.access_token);
+    return data.access_token; // Return the new access token
   } catch (error: any) {
     console.error(error);
     toast.error(error?.response?.data?.error?.message || 'Failed to refresh token');
+    throw error; // Rethrow the error to be caught in the interceptor
   }
 };
-
 // Add response interceptor
 customAxios.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    if ((error.response?.status === 403 || error.response?.status===401) && !originalRequest._retry) {
+    if ((error.response?.status === 403 || error.response?.status === 401) && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
-        await generateRefreshToken();
+        const newAccessToken = await generateRefreshToken();
+        // Update the Authorization header with the new access token
+        originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
         return customAxios(originalRequest);
       } catch (refreshError) {
         console.error("Token refresh failed:", refreshError);
+        // If refresh fails, you might want to redirect to login or handle it appropriately
+        return Promise.reject(refreshError);
       }
     }
     return Promise.reject(error);

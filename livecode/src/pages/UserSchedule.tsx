@@ -9,7 +9,8 @@ import {
   ResponseProps,
   TopicRecord,
   TopicData,
-  Topic
+  Topic,
+  ScheduleRecord
 } from "../lib/interfaces";
 import { dummyScheduleData, user1, user2 } from "../api/constants";
 import Avatar from "../components/Avatar";
@@ -19,39 +20,53 @@ import DropdownMenu from "@/components/DropMenu";
 // import { formatDate, isNearSchedule, getAction } from '../lib/utils'; // Assume you've moved these functions to a utils file
 import { serviceApiAction } from '@/lib/endUserServicesApi'
 import { Copy } from "lucide-react";
+// import ListSkeleton from "@/components/ListSkelton";
+
+import { Slide, toast, ToastContainer } from "react-toastify";
+import { SelectedTopics } from "@/components/HelperComponents";
 const SchedulePage: React.FC = () => {
   const [userSchedulesData, setUserSchedulesData] = useState<Schedule[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const { getAllContest } = serviceApiAction();
-
-  const [topicIds, setTopicIds] = useState<Record<string, string[]>>({});
-  useEffect(()=>{
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  // const [topicIds, setTopicIds] = useState<Record<string, string[]>>({});
+  useEffect(() => {
     document.title = 'Your Contest | Livecode'
-  },[])
+  }, [])
   const getUserSchedules = async (page: number, limit: number) => {
+    setIsLoading(true)
     const res = await getAllContest(page, limit);
-    if (res.success) {
-      const data = res?.data?.data;
+    console.log("user schedules res", res);
+    if (res.errors) {
+      console.log(res?.errors?.message);
+      toast.error(res?.errors?.message || 'Could not fetch the data, Please reload the page!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Slide,
+      })
+    } else {
+      const data = res?.data as Schedule[];
       // const topic = data?.map(schedule=>schedule?.map(topic=>topic.title)
-      const newTopicIds: Record<string, string[]> = {};
+      // const newTopicIds: Record<string, string[]> = {};
       data?.map((schedule: Schedule, index: number) => {
         if (schedule.topic) {
-          console.log(schedule.topic)
-          const topics = schedule.topic;
+          // const topics = schedule.topic;
           data[index].topic = schedule.topic?.map((topic: any) => topic.topic);
           console.log(data[index].topic)
-          // const tIds = topics.map((topic: any) => topic.topic?.topic_id);
-          // newTopicIds[index.toString()] = tIds;
         }
       })
-      // console.log(newTopicIds)
-      // setTopicIds(newTopicIds);
-      setUserSchedulesData(res?.data?.data as Schedule[]);
+      setUserSchedulesData(data);
       setTotalPages(res.totalPages || 1);
     }
-    console.log(res, topicIds);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -87,7 +102,7 @@ const SchedulePage: React.FC = () => {
     selectedTopics: string[];
   };
 
-  const statusStyles = {
+  const statusStyles:{[key:string]:string} = {
     live: "bg-purple-100 text-purple-700",
     completed: "bg-emerald-100 text-emerald-700",
     absent: "bg-red-100 text-red-700",
@@ -116,7 +131,7 @@ const SchedulePage: React.FC = () => {
       if (schedule?.status == 'upcoming' || schedule?.status == 'Incomplete')
         schedule.status = 'absent';
     }
-    const statusClass = statusStyles[schedule.status];
+    const statusClass = statusStyles[schedule.status!];
 
     return (
       <div
@@ -151,28 +166,28 @@ const SchedulePage: React.FC = () => {
       return (
         <>
 
-        <button className="text-yellow-600 hover:text-yellow-800 bg-yellow-100 hover:bg-yellow-200 p-2 rounded-md">
-          <Link
-            to={`/schedule-contest?id=${schedule.schedule_id}&edit=1`}
-            state={{
-              start_time: schedule.start_time,
-              topicIds: schedule.topic,
-              level: schedule.level,
-              id:schedule.schedule_id
-            }}
+          <button className="text-yellow-600 hover:text-yellow-800 bg-yellow-100 hover:bg-yellow-200 p-2 rounded-md">
+            <Link
+              to={`/schedule-contest?id=${schedule.schedule_id}&edit=1`}
+              state={{
+                start_time: schedule.start_time,
+                topicIds: schedule.topic,
+                level: schedule.level,
+                id: schedule.schedule_id
+              }}
 
-          >
-            Reschedule
-          </Link>
-        </button>
-            <div
-          className={`inline-flex items-center px-2 justify-center cursor-pointer hover:scale-105 transition-all duration-100 text-blue-500 hover:scale-105 active:text-green-900 
+            >
+              Reschedule
+            </Link>
+          </button>
+          <div
+            className={`inline-flex items-center px-2 justify-center cursor-pointer hover:scale-105 transition-all duration-100 text-blue-500 hover:scale-105 active:text-green-900 
                  transition-all duration-300`}
-          onClick={() => {navigator.clipboard.writeText(`http://localhost:5174/contest/pre/${schedule.schedule_id}`)}}
-          title="join link"
-        >
-          <Copy />
-        </div>
+            onClick={() => { navigator.clipboard.writeText(`http://localhost:5173/contest/pre/${schedule.schedule_id}`) }}
+            title="join link"
+          >
+            <Copy />
+          </div>
         </>
       );
     } else if (
@@ -213,32 +228,6 @@ const SchedulePage: React.FC = () => {
     );
   };
 
-  const SelectedTopics = (selectedTopics) => {
-    const maxTopicsToShow = 2; // Maximum number of topics to display without tooltip
-
-    if (selectedTopics.length <= maxTopicsToShow) {
-      // If there are 2 or fewer topics, display all of them
-      return (
-        <div className="flex">
-          {selectedTopics.map((item, index) => (
-            <p key={index}>{item.title},</p>
-          ))}
-        </div>
-      );
-    } else {
-      // If there are more than 2 topics, display the first two followed by "..."
-      const displayedTopics = selectedTopics.slice(0, maxTopicsToShow);
-      return (
-        <div className="flex" title={selectedTopics}>
-          {displayedTopics.map((item, index) => (
-            <p key={index}>{item},</p>
-          ))}
-          <p key="more">...</p>
-        </div>
-      );
-    }
-  };
-
   const renderCell = (schedule: Schedule, column: Column) => {
     switch (column.key) {
       case "start_time":
@@ -250,7 +239,7 @@ const SchedulePage: React.FC = () => {
       case "join_link":
         return getAction(schedule, column);
       case "topic":
-        return SelectedTopics(schedule.topic);
+        return SelectedTopics(schedule.topic!);
       case "feedback":
         return schedule.feedback ? (
           <Link
@@ -281,19 +270,22 @@ const SchedulePage: React.FC = () => {
 
   return (
     <div className="bg-gray-50 dark:bg-gray-900 min-h-full">
+      <ToastContainer />
       <GenericTable<Schedule>
         initialData={userSchedulesData}
         columns={scheduleColumns}
         filterOptions={scheduleFilterOptions}
         renderCell={renderCell}
         getRowClassName={getRowClassName}
-        searchFields={["details"]}
-        filterField="status"
+        searchFields={['level']}
+        filterField="start_time"
         itemsPerPage={itemsPerPage}
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={handlePageChange}
+        isLoading={isLoading}
       />
+
     </div>
   );
 };

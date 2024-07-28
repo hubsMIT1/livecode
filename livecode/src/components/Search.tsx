@@ -10,7 +10,7 @@ interface SearchProps {
 const Search: React.FC<SearchProps> = ({ searchTerm, onSearchChange, placeholder = 'Search' }) => {
   return (
     <div className="w-full">
-      <form className="flex items-center">
+      {/* <form className="flex items-center"> */}
         <label htmlFor="simple-search" className="sr-only">Search</label>
         <div className="relative w-full">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -27,7 +27,7 @@ const Search: React.FC<SearchProps> = ({ searchTerm, onSearchChange, placeholder
             onChange={onSearchChange}
           />
         </div>
-      </form>
+      {/* </form> */}
     </div>
   );
 };

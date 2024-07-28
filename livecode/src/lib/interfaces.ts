@@ -8,7 +8,9 @@ export interface Problem {
   slug:string;
   difficulty_level: 'Easy' | 'Medium' | 'Hard';
   average_time_to_solve: number;
+  topic:{title:string}[]
 }
+
 
 export interface Column {
   key: keyof Problem | keyof Schedule;
@@ -25,10 +27,11 @@ export interface FilterOption {
 export const problems = problemsData
 
 export const columns: Column[] = [
-  { key: 'status', header: 'Status' },
+  // { key: 'status', header: 'Status' },
   { key: 'title', header: 'Title' },
   { key: 'difficulty_level', header: 'Difficulty' },
   { key: 'average_time_to_solve', header: 'Avg Time' },
+  {key:'topic',header:'Topics'}
   // { key: 'solved_by', header: 'Solved by' },
 ];
 
@@ -170,9 +173,7 @@ export interface Error {
 export interface ResponseProps {
   success: boolean;
   errors?: Error;
-  data?: Schedule | TopicData | Question | Solution | Sheet | Problem | {
-    data: TopicData[] | Question[] | Solution[] | Sheet[] | Schedule[] | Problem []
-  };
+  data?: Schedule | TopicData | Question | Solution | Sheet | Problem | TopicData[] | Question[] | Solution[] | Sheet[] | Schedule[] | Problem []
   total?: number,
   pageNumber?: number,
   limitNumber?: number,
@@ -221,7 +222,7 @@ export interface QuestionRecord {
 }
 
 export interface Schedule {
-  schedule_id: string;
+  schedule_id: string | undefined;
   level: string;
   join_link?: string | null;
   start_time: string;

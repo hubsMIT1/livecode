@@ -159,7 +159,8 @@ export default function Contest() {
 
 
   const handlerUserInput = useCallback((input: string) => {
-    setUserInput(input);
+      console.log(input)
+    // setUserInput(input);
   }, []);
 
   const runTestCases = useCallback(async () => {

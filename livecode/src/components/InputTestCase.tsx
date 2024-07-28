@@ -64,9 +64,8 @@ const TextAreaComponent: React.FC<InputType> = ({handlerUserInput}) => {
 //   };
 
   return (
-    <div className="flex flex-col items-center justify-center bg-gray-100">
+    <div className="flex flex-col items-center justify-center">
       <div className="w-full min-h-2">
-
       <textarea
         rows={6}
         className="block no-scrollbar p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 focus:outline-none"

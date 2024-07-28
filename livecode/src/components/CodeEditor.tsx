@@ -9,7 +9,7 @@ interface CodeEditorProps {
   language: string;
   initialCode: string;
   onCodeChange: (code: string) => void;
-  live: { roomId: string; ready: boolean };
+  live?: { roomId: string; ready: boolean };
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = ({
@@ -41,7 +41,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   }, [editorTheme]);
 
   useEffect(() => {
-    if (socket && live.ready) {
+    if (socket && live?.ready) {
       const handleCodeUpdate = async (updatedCode: string) => {
         if (editorRef.current) {
           remoRef.current = true;
@@ -88,7 +88,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         // handleCodeUpdate.cancel(); // Cancel any pending debounced calls
       };
     }
-  }, [socket,live.ready]);
+  }, [socket,live?.ready]);
 
   const emitCodeChange = (code: string) => {
     if (timeoutRef.current) {
@@ -96,7 +96,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     }
     timeoutRef.current = setTimeout(() => {
       socket?.emit("code_change", {
-        roomId: live.roomId,
+        roomId: live?.roomId,
         code: code,
         to: remoteUser?.username,
       });
@@ -114,7 +114,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         const updatedCode = editor.getValue();
         codeRef.current = updatedCode;
         onCodeChange(updatedCode);
-        if (live.ready && socket) {
+        if (live?.ready && socket) {
           emitCodeChange(updatedCode);
         }
       }

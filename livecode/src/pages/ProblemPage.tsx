@@ -1,28 +1,56 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import GenericTable from '../components/GenericTable';
-import { Problem, Column, filterOptions, columns } from '../lib/interfaces';
+import { Problem, Column, filterOptions, columns, ResponseProps } from '../lib/interfaces';
 import { dataStructuresTopics } from '../api/constants';
 import { CircleCheckBig, CircleSlash, Ellipsis } from 'lucide-react';
 import { serviceApiAction } from '../lib/endUserServicesApi';
+import { Slide, toast, ToastContainer } from 'react-toastify';
+import { SelectedTopics } from '@/components/HelperComponents';
 
 const ProblemPage: React.FC = () => {
   const { getAllQuestions } = serviceApiAction();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [problemsData, setProblemsData] = useState<Problem[]>([]);
+  const [itemsPerPage, setItemsPerPage] = useState(50);
+  const [problemsData, setProblemsData] = useState<Problem[] | []>([]);
+  const [isLoading,setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchProblems = async () => {
+      setIsLoading(true);
       const res = await getAllQuestions(currentPage, itemsPerPage);
-      if (res.success) {
-        setProblemsData(res?.data.data);
-        console.log(res.data.data)
-        setTotalPages(res.totalPages || 1);
+      if (res.errors) {
+        console.log(res?.errors?.message);
+        toast.error(res?.errors?.message,{
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Slide,
+        })
       }
+      else {
+        setProblemsData([])
+        console.log(res.data);
+        const data = res.data as Problem[];
+        data?.map((problem:Problem,index:number)=>
+        {
+          data[index].topic = problem.topic?.map((topic:any)=>topic.topic);
+        })
+        setTotalPages(res?.totalPages || 1);
+        setProblemsData(data);
+      }
+      setIsLoading(false);
     };
-    fetchProblems();
+
+    if(!isLoading)
+      fetchProblems();
+
   }, [currentPage, itemsPerPage]);
 
   const handlePageChange = (newPage: number) => {
@@ -56,6 +84,9 @@ const ProblemPage: React.FC = () => {
         );
       case 'average_time_to_solve':
         return `${problem.average_time_to_solve}`;
+      case 'topic':
+        return SelectedTopics(problem?.topic)
+
       // case 'solved_by':
       //   return problem.solved_by.toLocaleString();
       default:
@@ -65,6 +96,7 @@ const ProblemPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 ">
+      <ToastContainer />
       <div className="max-w-7xl mx-auto">
         <GenericTable<Problem>
           initialData={problemsData}
@@ -79,6 +111,7 @@ const ProblemPage: React.FC = () => {
           onPageChange={handlePageChange}
           topicDrop={true}
           topicDropItem={dataStructuresTopics}
+          isLoading={isLoading}
         />
       </div>
     </div>
