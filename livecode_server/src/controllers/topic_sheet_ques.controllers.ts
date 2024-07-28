@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { prisma } from '../utils/dbsetup';
 import { paginate } from '../utils/pagination';
 import {updateEntity, getEntityByTitle,deleteEntity,createEntity, createIncludeEntity, getEntityById, getARandomProblem} from '../utils/helper'
@@ -95,7 +95,7 @@ export const getTopMatchRandmonQuestion = async (req:Request,res:Response) => {
     if (randomQuestion) {
       res.json({success:true,problem: randomQuestion});
       if(schedule_id){
-        updateRoom({id:schedule_id,questionTitle:randomQuestion.question_id});
+        updateRoom({id:schedule_id,slug:randomQuestion.slug});
       }
 
     } else {

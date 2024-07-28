@@ -24,7 +24,7 @@ router.post('/signup', async (req: Request, res: Response, next: NextFunction) =
 
 router.post('/login', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
     const user = await loginUserSchema.parseAsync(req.body);
     await loginUser(req, res);
   } catch (error) {

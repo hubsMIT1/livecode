@@ -30,7 +30,8 @@ export const getRoomById = async (id: string): Promise<Schedule | { error: strin
 interface updateRoompProps{
     [key:string]:string
 }
-export const updateRoom = async ({id,allowedUser,questionTitle,owner}:updateRoompProps) => {
+export const updateRoom = async ({id,allowedUser,slug,owner}:updateRoompProps) => {
+    console.log("updating the schedule for",id,allowedUser,slug)
 
     try {
         const updatedSchedule = await prisma.schedule.update({
@@ -39,7 +40,7 @@ export const updateRoom = async ({id,allowedUser,questionTitle,owner}:updateRoom
                 allowed_users: [owner,allowedUser]
             }
             : {
-                question_id:questionTitle
+                question_slug:slug
             }
         });
         return updatedSchedule;

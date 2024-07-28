@@ -14,7 +14,7 @@
   "description": "",
   "dependencies": {
     "@prisma/adapter-pg": "^5.15.1",
-    "@prisma/client": "^5.15.1",
+    "@prisma/client": "^5.17.0",
     "@types/morgan": "^1.9.9",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",

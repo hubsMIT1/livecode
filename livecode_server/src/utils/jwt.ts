@@ -10,6 +10,7 @@ export const verifyJwt = <T>(token: string): { payload: T | null, error: string 
     const payload = jwt.verify(token, JWT_SECRET) as T;
     return { payload, error: null };
   } catch (error) {
+    console.log("token verify error",error);
     if (error instanceof Error && error.name === 'TokenExpiredError') {
       return { payload: null, error: 'TokenExpiredError' };
     } else {

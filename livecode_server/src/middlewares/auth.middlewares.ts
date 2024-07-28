@@ -16,7 +16,7 @@ export const authMiddleware = (req: AuthenticatedRequest, res: Response, next: N
   const token = authHeader.split(' ')[1];
 
   const { payload, error } = verifyJwt<{ userId: string, username: string, role: string }>(token);
-
+  console.log("auth token error",error)
   if (error === 'TokenExpiredError') { 
     return res.status(403).json({error: "TokenExpiredError", message: 'Unauthorized: Token has expired' });
   }
@@ -25,7 +25,6 @@ export const authMiddleware = (req: AuthenticatedRequest, res: Response, next: N
   if (error === 'InvalidTokenError' || !payload) {
     return res.status(401).json({error:"InvalidTokenError", message: 'Unauthorized: Invalid token' });
   }
-
   req.payload = payload;
   next();
 };
@@ -37,7 +36,7 @@ export const isAdminOrStaff = async (req: any, res: Response, next: NextFunction
   if(req.payload)
     user = req.payload
 
-  console.log(user)
+  // console.log(user)
 
   if (user && user.role!=='admin' && user.role !=='user')  // convert into staff
   {

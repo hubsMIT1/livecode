@@ -52,7 +52,7 @@ process.on('SIGINT', async () => {
   }
 });
 
-const dbErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
+export const dbErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
     if (err.code === 'P1001') {
       console.error('Database connection error:', err);

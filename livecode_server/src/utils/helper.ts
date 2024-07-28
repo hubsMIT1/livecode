@@ -4,6 +4,7 @@ import { prisma } from './dbsetup';
 import { getIdParamSchema } from '../schemas/common.schema';
 import {getPaginationParams} from './pagination';
 import { Prisma } from '@prisma/client';
+import { DataBaseConnectionError } from './errors';
 
 type IncludeOptions = {
   [key: string]: boolean | object;
@@ -74,7 +75,7 @@ export const createIncludeEntity = async (req: Request, res: Response, entity: '
     const data = req.body;
     const { entityData, includeData } = prepareEntityData(data, included);
 
-    console.log(entityData,includeData)
+    // console.log(entityData,includeData)
     
     const createdEntity = await entityMap[entity].create({
       data: {
@@ -160,11 +161,20 @@ export const getEntityByTitle = async (req: Request, res: Response, entity: 'top
       },
     });
   } catch (error: any) {
-    return res.status(404).json({success:false, error: error?.message });
+    // return res.status(404).json({success:false, error: error?.message });
+    if (error instanceof Prisma.PrismaClientKnownRequestError) 
+      DataBaseConnectionError(error,res);
+    else {
+      return res.status(500).json({
+        success:false,
+        status: 'error',
+        message: 'Internal server error',
+      });
+    }
   }
 
   if (!foundEntity) {
-    return res.status(404).json({ success:false,error: `${entity.charAt(0).toUpperCase() + entity.slice(1)} not found` });
+    return res.status(400).json({ success:false,error: `${entity.charAt(0).toUpperCase() + entity.slice(1)} not found` });
   }
 
   if (entity !== 'question' && foundEntity.questions) {
@@ -201,7 +211,7 @@ export const getEntityById = async (req: Request,res: Response,entity: Entity,in
     });
     if(!entityID){
       if (!foundEntity) {
-        return res.status(404).json({success:false, error: `${entity.charAt(0).toUpperCase() + entity.slice(1)} not found` });
+        return res.status(400).json({success:false, error: `${entity.charAt(0).toUpperCase() + entity.slice(1)} not found` });
       }
       res.json({success:true,data:foundEntity});
     }
@@ -209,9 +219,19 @@ export const getEntityById = async (req: Request,res: Response,entity: Entity,in
       return foundEntity;
     }
   } catch (error: any) {
-    if(!entityID)
-      res.status(500).json({success:false, error: error.message });
-    else return {error: error.message}
+    if (error instanceof Prisma.PrismaClientKnownRequestError) 
+      DataBaseConnectionError(error,res);
+    else {
+      return res.status(500).json({
+        success:false,
+        status: 'error',
+        message: 'Internal server error',
+        // error: error.message
+      });
+    }
+    // if(!entityID)
+    //   res.status(500).json({success:false, error: error.message });
+    // else return {error: error.message}
   }
 };
 
@@ -287,7 +307,15 @@ const handleEntityOperation = async (req: Request, res: Response, entity: any, o
     if(result)
      res.json({success:true,data:result});
   } catch (error: any) {
-    res.status(404).json({success:false, error: error.message });
+    if (error instanceof Prisma.PrismaClientKnownRequestError) 
+      DataBaseConnectionError(error,res);
+    else {
+      return res.status(500).json({
+        success:false,
+        status: 'error',
+        message: 'Internal server error',
+      });
+    }
   }
 };
 
@@ -379,7 +407,7 @@ export const getARandomProblem = async (
       topic: true
     }
   });
-  console.log("question",questions)
+  // console.log("question",questions)
   const sortedQuestions = questions
     .map(question => ({
       ...question,
@@ -387,11 +415,11 @@ export const getARandomProblem = async (
     }))
     .sort((a, b) => b.matchingTopicsCount - a.matchingTopicsCount);
 
-    console.log("sorted",sortedQuestions)
+    // console.log("sorted",sortedQuestions)
 
     const topN = 10;
     const randomIndex = Math.floor(Math.random() * Math.min(topN, sortedQuestions.length));
-    console.log("index", randomIndex)
+    // console.log("index", randomIndex)
     return sortedQuestions[randomIndex];
   }
 // export const createEntity = async (req: Request, res: Response, entity: 'topic' | 'sheet' | 'question' | 'schedule') => {

@@ -72,7 +72,7 @@ export const loginUser = async (req: Request<{}, {}, LoginUserInput>, res: Respo
    const  accessToken  = signJwt(payload,'1h');
    const  refreshToken  = signJwt(payload,'30d');
    setRefreshTokenCookie(res, refreshToken);
-   console.log(res.cookie)
+  //  console.log(res.cookie)
 
    return res.json({ access_token: accessToken,refresh_token: refreshToken,user:payload,success:true });
 };
@@ -89,8 +89,8 @@ export const refreshToken = async (req: any, res: Response) => {
   // if (!payload) {
   //   return res.status(401).json({ message: 'Unauthorized' });
   // }
-    console.log("refhre called")
-    const payload = {userId: req.payload.userId,username:req.payload.username,role:req.payload.role};
+    // console.log("refhre called")
+    const payload = {user_id: req.payload.user_id, role:req.payload.role, username:req.payload.username,};
     const  accessToken  = signJwt(payload,'1h');
     return res.json({success:true,access_token: accessToken });
 };

@@ -76,7 +76,7 @@ const selectTopic = {
   allowed_users: true,
   status: true,
   end_time: true,
-  question_id: true,
+  question_slug: true,
   topic: {
     select: {
       topic: {

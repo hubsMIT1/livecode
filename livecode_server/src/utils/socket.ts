@@ -22,7 +22,7 @@ export function setupSocketIO(io: Server<DefaultEventsMap, DefaultEventsMap, Def
     io.use((socket: AuthenticatedSocket, next) => {
         const { token, roomId } = socket.handshake.auth;
         // console.log(token)
-        const { payload, error } = { payload: { username: token, user_id: token, role: token }, error: "" };
+        const { payload, error } =   verifyJwt<{ user_id: string; username: string; role: string }>(token)  //{ payload: { username: token, user_id: token, role: token }, error: "" };
         //verifyJwt<{ user_id: string; username: string; role: string }>(token);
         // const 
         if (error === 'TokenExpiredError') {

@@ -27,7 +27,7 @@ export interface Schedule {
   allowed_users: string[];
   status?: string | null;
   end_time?: Date | null;
-  question_id?: string | null;
+  question_slug?: string | null;
   owner?: User;
   topic?: string[];
   // feedback?: Feedback[];

@@ -103,7 +103,7 @@ export default function Contest() {
             // setRemoteUser({ username: rUser, status: true })
           }
 
-          if (data?.question_id === null) {
+          if (data?.question_slug === null) {
             const topics = data?.topic?.map((topic: any) => topic.topic?.topic_id).join(',');
             // console.log(topics);
             const res = await getNewRandomProblem({ id: roomId, topics: topics, level: data.level, allowed_users: data.allowed_users })
@@ -117,7 +117,7 @@ export default function Contest() {
               console.log(res.errors.message)
             }
           } else {
-            getProblemDesc(data?.question_id!);
+            getProblemDesc(data?.question_slug!);
           }
         }
         else {

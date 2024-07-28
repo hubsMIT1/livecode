@@ -1,5 +1,6 @@
-import { PrismaClient } from '@prisma/client';
-import { Request,Response } from 'express';
+import { Prisma, PrismaClient } from '@prisma/client';
+import { Request,Response,NextFunction } from 'express';
+import { DataBaseConnectionError } from './errors';
 
 const prisma = new PrismaClient();
 
@@ -27,11 +28,11 @@ export const paginate = async ({ req, model, res, where, include, select }: Pagi
     };
 
     if (where) {
-      console.log(where)
+      // console.log(where)
       queryOptions.where = where;
     }
     if(include){
-      console.log(include)
+      // console.log(include)
       queryOptions.include = include
     }
     if (select) {
@@ -49,10 +50,18 @@ export const paginate = async ({ req, model, res, where, include, select }: Pagi
       limitNumber,
       totalPages: Math.ceil(total / limitNumber),
     };
-    console.log("schedule data",data)
+    // console.log("schedule data",data)
     res.json({success:true,data:result});
   }catch(error:any){
-    res.status(401).json({success:false,error:error?.message})
+    console.error("Get user schedule errors:", error?.message, error);
+    if (error instanceof Prisma.PrismaClientKnownRequestError) 
+      DataBaseConnectionError(error,res);
+    else {
+      return res.status(500).json({
+        status: 'error',
+        message: 'Internal server error',
+      });
+    }
   }
 };
 
