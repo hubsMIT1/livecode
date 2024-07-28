@@ -33,3 +33,18 @@ npx tsc
 - update it properly with frontend
   
 ### Integrate BE + FE
+
+
+### Run Local frontend
+```
+cd livecode
+pnpm add
+pnpm run dev
+```
+
+### Run Local Backend
+```
+cd livecode_server
+npm i
+npm run dev
+```
