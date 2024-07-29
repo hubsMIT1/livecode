@@ -2,7 +2,7 @@ import { callApi } from './api';
 import { useSetRecoilState } from 'recoil';
 import { AuthResult,RegistrationData,LoginData,AuthResponse,User } from './interfaces';
 import { userState,tokenState } from '@/state/authState';
-const handleAuthErrors = (error: string, status: number): AuthResult['errors'] => {
+const handleAuthErrors = (error: string, status: number | null): AuthResult['errors'] => {
   
   const errors: AuthResult['errors'] = {};
   const errorMessage = error.toLowerCase();

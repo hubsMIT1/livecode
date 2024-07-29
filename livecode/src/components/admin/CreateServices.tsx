@@ -1,22 +1,22 @@
 import { useEffect, useState } from "react";
 import LInput from "../ui/Input";
-import Multiselect from "../MultiSelectInput";
+// import Multiselect from "../MultiSelectInput";
 import ButtonUI from "../Button";
 import { ImagePlus } from "lucide-react";
 import LTextArea from "../ui/TextArea";
 // import LFileInput from "../ui/FileInput";
-import { dataStructuresTopics, difficultyOptions } from "@/api/constants";
+import {  difficultyOptions } from "@/api/constants";
 import DifficultySelection from '../DifficultyLevel'
 import { QuestionRecord, TopicRecord } from "@/lib/interfaces";
 import { serviceApiAction } from "@/lib/endUserServicesApi";
 import { Slide, ToastContainer, toast } from 'react-toastify';
 import ButtonSkeleton from "../ButtonSkelton";
 // import { topicState } from "@/state/TSQState";
-import { useRecoilState } from "recoil";
+// import { useRecoilState } from "recoil";
 import Topics from "../Topics";
 
 const CreateTSP: React.FC = () => {
-  const { createQuestion, getAllTopics, createTopic, createSheet } = serviceApiAction()
+  const { createQuestion, createTopic } = serviceApiAction()
   // const [topics,setTopics] = useRecoilState(topicState);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -136,6 +136,12 @@ const CreateTSP: React.FC = () => {
         }
         else {
           console.log(res)
+          if(res?.errors?.status==500)
+            setErrors(prev => ({
+              ...prev,
+              topic:"Enter the unique title"
+            }));
+
           toast.error(res.errors?.message || 'Error, while creating topic!', {
             position: "top-right",
             autoClose: 5000,

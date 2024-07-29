@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ReadProblem from "@/components/ReadProblem";
 import TabComponent from "@/components/Tabs";
 import OneTwoComponent from "@/components/OneLeftTwoRight";
@@ -9,7 +9,7 @@ import CodeOutput from "@/components/CodeResult";
 import TextAreaComponent from "@/components/InputTestCase";
 import ToastDemo from "@/components/Toast";
 import { getContentFromGithub } from "@/lib/api";
-import { serviceApiAction } from '../lib/endUserServicesApi';
+// import { serviceApiAction } from '../lib/endUserServicesApi';
 import ProblemSolveEditor from '@/components/SolveProblemEditor'
 
 const initialCode = `
@@ -29,16 +29,16 @@ export default function SolveProblem() {
   },[])
   // const [code, setCode] = useState(initialCode);
   const [selectedLang, setSelectedLang] = useState(defaultLang);
-  const [userInput, setUserInput] = useState("");
-  const [apiResponse, setApiResponse] = useState<any>(null);
+  // const [userInput, setUserInput] = useState("");
+  // const [apiResponse, setApiResponse] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [problemDesc, setProblemDesc] = useState<string>('')
-  const {getQuestionBySlug} = serviceApiAction();
-  const handleGetContest = () => {
-    // find contest 
+  // const {getQuestionBySlug} = serviceApiAction();
+  // const handleGetContest = () => {
+  //   // find contest 
 
-  }
+  // }
   const getProblemDesc = async (path: string) => {
     const route = `${path}/problem.md`
 
@@ -49,7 +49,7 @@ export default function SolveProblem() {
       setProblemDesc("Title: " + path + '\n\n' + "DESCRIPTION and INSTRUCTION stil have to enter for some of the problem!")
     else setProblemDesc(desc);
   }
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -95,8 +95,8 @@ export default function SolveProblem() {
     content: (
       <CodeResultComponent
         isLoading={isLoading}
-        apiResponse={apiResponse}
-        userInput={userInput}
+        apiResponse={null}
+        userInput={''}
       />
     ),
   };

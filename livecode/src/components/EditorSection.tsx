@@ -1,10 +1,3 @@
-import CodeEditor from "./CodeEditor";
-import { useState } from "react";
-import { programmingLanguages } from "../api/constants";
-import Combobox  from "./Combobox";
-
-
-
 
 const EditorSection: React.FC = () => {
 

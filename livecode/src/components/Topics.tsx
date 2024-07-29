@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { TopicData } from "@/lib/interfaces";
-import { time } from "console";
+import { getAllResponse, TopicData } from "@/lib/interfaces";
 import { useLocation } from "react-router-dom";
 import { serviceApiAction } from "@/lib/endUserServicesApi";
 import { useRecoilState } from "recoil";
@@ -37,8 +36,9 @@ const Topics: React.FC<IdentificationProps> = ({
           if(res.errors){
             console.log(res?.errors?.message);
           }else{
-            const data = res?.data as TopicData[];
-            setTopics(data)
+            const data = res.data as getAllResponse;
+            const topicDatas = data?.data as TopicData[];
+            setTopics(topicDatas)
           }
           setIsLoading(false);
         }

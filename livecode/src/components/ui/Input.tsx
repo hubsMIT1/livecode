@@ -1,6 +1,3 @@
-// import { HandIcon } from "lucide-react";
-
-import { Cross, CrossIcon, X } from "lucide-react";
 
 interface LInputProps{
     label:string;
@@ -14,7 +11,7 @@ interface LInputProps{
     handleIcon?:any;
 }
 
-const LInput:React.FC<LInputProps>  = ({label,handleChange,name,type,errors,style,value,Icon,handleIcon}) =>{
+const LInput:React.FC<LInputProps>  = ({label,handleChange,name,type,errors,style,value}) =>{
     
     return (
         <div className={style? style : ''}>

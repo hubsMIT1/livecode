@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { DatePicker, Space } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 interface EventDetailsProps {
   unavailableTimes: string[]; // ISO 8601 formatted strings
@@ -9,20 +9,19 @@ interface EventDetailsProps {
 }
 
 const EventDetails: React.FC<EventDetailsProps> = ({ unavailableTimes, handleSchedule }) => {
-  const { st } = useParams();
   const location = useLocation();
   const { start_time } = location.state || {};
   console.log(start_time)
   // console.log(dayjs(st))
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
   const [selectedTime, setSelectedTime] = useState('');
-  const [editTime, setEditTime] = useState('');
+  // const [editTime, setEditTime] = useState('');
   useEffect(() => {
     if (start_time) {
       const stDays = dayjs(start_time);
       setSelectedDate(stDays);
       setSelectedTime(stDays.format('HH:mm'));
-      setEditTime(stDays.format('HH:mm'));
+      // setEditTime(stDays.format('HH:mm'));
       handleSchedule(stDays.unix());
     }
   }, [start_time]);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Code2Icon, User, User2Icon, UserCircle } from "lucide-react";
+import { Code2Icon, UserCircle } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { userState } from "@/state/authState";

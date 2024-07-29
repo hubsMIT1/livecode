@@ -2,7 +2,7 @@ import { Code2Icon } from 'lucide-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { navItems } from '@/api/constants';
-import DropdownMenu from './DropMenu';
+// import DropdownMenu from './DropMenu';
 
 
 // export function ModeToggle() {

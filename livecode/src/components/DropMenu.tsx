@@ -1,12 +1,12 @@
 import React, { useState, useEffect,useRef } from 'react';
 import Topics from './Topics';
-import { dataStructuresTopics } from '@/api/constants';
+// import { dataStructuresTopics } from '@/api/constants';
 import { TopicData } from '@/lib/interfaces';
 
-interface MenuItem {
-  label: string;
-  onClick: () => void;
-}
+// interface MenuItem {
+//   label: string;
+//   onClick: () => void;
+// }
 
 interface DropdownMenuProps {
   items?: TopicData[];
@@ -18,11 +18,11 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ items,isTopic,title="Topics
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const handleItemClick = (item:MenuItem) => {
-    item.onClick();
-    console.log('Selected item:', item.toString());
-    setIsOpen(false);
-  };
+  // const handleItemClick = (item:MenuItem) => {
+  //   item.onClick();
+  //   console.log('Selected item:', item.toString());
+  //   setIsOpen(false);
+  // };
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {

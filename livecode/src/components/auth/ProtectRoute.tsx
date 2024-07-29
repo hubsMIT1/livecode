@@ -3,7 +3,7 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { isAuthenticatedState, tokenState, userState } from '../../state/authState';
+import { isAuthenticatedState, tokenState } from '../../state/authState';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;

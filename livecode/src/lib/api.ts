@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { toast } from 'react-toastify';
-import { Feedback, Question, QuestionRecord, ResponseProps, Schedule, ScheduleRecord, ScheduleSession, Sheet, Solution, TopicData, TopicRecord, getAllResponse } from './interfaces';
+import { Feedback, QuestionRecord, ResponseProps, Schedule, ScheduleRecord, Solution, TopicRecord, updateContestProps } from './interfaces';
 // console.log(import.meta.env.VITE_BASE_URL)
 const BASE_URL = import.meta.env.VITE_BASE_URL //'http://localhost:3001/api/';
 const GITHUB_PROBLEM_PATH = import.meta.env.VITE_GITHUB_PROBLEM_PATH // 'https://raw.githubusercontent.com/hubsMIT1/livecode/master/problems/';
@@ -116,8 +116,8 @@ export const getContentFromGithub = async (route: string) => {
 export const handleCalledApi = async (
   method: string,
   endpoint: string,
-  data?: Schedule | Feedback | Solution | ScheduleRecord | TopicRecord | QuestionRecord
-): Promise<ResponseProps | getAllResponse> => {
+  data?: Schedule | Feedback | Solution | ScheduleRecord | TopicRecord | QuestionRecord | updateContestProps
+): Promise<ResponseProps> => {
   try {
     const response = await callApi<ResponseProps>(method, endpoint, data);
     console.log("response", response);
@@ -127,6 +127,7 @@ export const handleCalledApi = async (
       return { success: false, errors: { message: response.error, status: response?.status } };
     }
     else if (response.data) {
+      console.log("response callapi",response,'\n\n', "data", response.data);
       return response.data;
     }
     return { success: false, errors: { general: 'An unexpected error occurred.' } };

@@ -1,37 +1,37 @@
 import Alert from '@/components/Alert';
 import React, { useEffect, useState } from 'react';
 
-interface FeedbackFormData {
-  problemSolvingRating: number;
-  codingRating: number;
-  communicationRating: number;
-  peerStrengths: string;
-  areasForImprovement: string;
-  interviewerRating: number;
-  topicRating: number;
-}
+// interface FeedbackFormData {
+//   problemSolvingRating: number;
+//   codingRating: number;
+//   communicationRating: number;
+//   peerStrengths: string;
+//   areasForImprovement: string;
+//   interviewerRating: number;
+//   topicRating: number;
+// }
 
 const FeedbackPage: React.FC = () => {
-  const [formData, setFormData] = useState<FeedbackFormData>({
-    problemSolvingRating: 0,
-    codingRating: 0,
-    communicationRating: 0,
-    peerStrengths: '',
-    areasForImprovement: '',
-    interviewerRating: 0,
-    topicRating: 0,
-  });
+  // const [formData, setFormData] = useState<FeedbackFormData>({
+  //   problemSolvingRating: 0,
+  //   codingRating: 0,
+  //   communicationRating: 0,
+  //   peerStrengths: '',
+  //   areasForImprovement: '',
+  //   interviewerRating: 0,
+  //   topicRating: 0,
+  // });
 
   useEffect(()=>{
     document.title = 'Feedback | Livecode'
   },[])
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+  // const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  //   const { name, value } = event.target;
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     [name]: value,
+  //   }));
+  // };
 
   const [showAlert, setShowAlert] = useState(false);
 
@@ -241,7 +241,7 @@ const FeedbackPage: React.FC = () => {
           <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
             <button
               className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500"
-              type='sumbit'
+              type='submit'
             >
               Submit Feedback
             </button>

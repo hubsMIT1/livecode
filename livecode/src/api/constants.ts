@@ -290,7 +290,7 @@ export const options = [
       join_link: null,
       level: "medium",
       owner_id: "da79d156-eb09-472f-b104-b978f0992f8a",
-      question_id: null,
+      question_slug: null,
       schedule_id: "73d2eb89-8fd0-4ef1-ad5c-57d8792566a6",
       start_time: "2024-07-04T08:30:00.000Z",
       status: "Incomplete"

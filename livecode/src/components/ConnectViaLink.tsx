@@ -24,7 +24,10 @@ export default function ConnectViaLink() {
                 />
                 </div>
             <div className="relative top-3">
-            <ButtonUI title="Go" handleSubmit={() => { if(link.length>0) navigate(`/contest/pre/${link}`)}} />
+            <ButtonUI title="Go" handleSubmit={() => { if(link.length>0) navigate(`/contest/pre/${link}`)
+            else {
+                setErrors({link:'Please enter a valid join id!'})
+            }}} />
 
             </div>
         </div>

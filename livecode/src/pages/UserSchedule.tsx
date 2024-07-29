@@ -2,21 +2,16 @@ import React, { useEffect, useState } from "react";
 import GenericTable from "../components/GenericTable";
 import {
   Column,
-  ScheduleSession,
   scheduleColumns,
   scheduleFilterOptions,
   Schedule,
-  ResponseProps,
-  TopicRecord,
-  TopicData,
-  Topic,
-  ScheduleRecord
+  getAllResponse,
 } from "../lib/interfaces";
-import { dummyScheduleData, user1, user2 } from "../api/constants";
+// import { dummyScheduleData, user1, user2 } from "../api/constants";
 import Avatar from "../components/Avatar";
 import { Link } from "react-router-dom";
-import Topics from "@/components/Topics";
-import DropdownMenu from "@/components/DropMenu";
+// import Topics from "@/components/Topics";
+// import DropdownMenu from "@/components/DropMenu";
 // import { formatDate, isNearSchedule, getAction } from '../lib/utils'; // Assume you've moved these functions to a utils file
 import { serviceApiAction } from '@/lib/endUserServicesApi'
 import { Copy } from "lucide-react";
@@ -28,7 +23,7 @@ const SchedulePage: React.FC = () => {
   const [userSchedulesData, setUserSchedulesData] = useState<Schedule[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  // const [itemsPerPage, setItemsPerPage] = useState(10);
   const { getAllContest } = serviceApiAction();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   // const [topicIds, setTopicIds] = useState<Record<string, string[]>>({});
@@ -53,7 +48,8 @@ const SchedulePage: React.FC = () => {
         transition: Slide,
       })
     } else {
-      const data = res?.data as Schedule[];
+      const allData = res?.data as getAllResponse;
+      const data = allData.data as Schedule[];
       // const topic = data?.map(schedule=>schedule?.map(topic=>topic.title)
       // const newTopicIds: Record<string, string[]> = {};
       data?.map((schedule: Schedule, index: number) => {
@@ -64,14 +60,14 @@ const SchedulePage: React.FC = () => {
         }
       })
       setUserSchedulesData(data);
-      setTotalPages(res.totalPages || 1);
+      setTotalPages(allData.totalPages || 1);
     }
     setIsLoading(false);
   };
 
   useEffect(() => {
-    getUserSchedules(currentPage, itemsPerPage);
-  }, [currentPage, itemsPerPage]);
+    getUserSchedules(currentPage, 50);
+  }, [currentPage]);
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
@@ -93,14 +89,14 @@ const SchedulePage: React.FC = () => {
     );
   };
 
-  type ScheduleSession = {
-    time: string;
-    joinLink: string;
-    status: "live" | "completed" | "absent" | "pause" | "incoming";
-    joinlink: string;
-    action: string[];
-    selectedTopics: string[];
-  };
+  // type ScheduleSession = {
+  //   time: string;
+  //   joinLink: string;
+  //   status: "live" | "completed" | "absent" | "pause" | "incoming";
+  //   joinlink: string;
+  //   action: string[];
+  //   selectedTopics: string[];
+  // };
 
   const statusStyles:{[key:string]:string} = {
     live: "bg-purple-100 text-purple-700",
@@ -142,7 +138,7 @@ const SchedulePage: React.FC = () => {
     );
   };
 
-  const getAction = (schedule: Schedule, column: Column) => {
+  const getAction = (schedule: Schedule) => {
     const scheduleDate = new Date(schedule.start_time);
     const now = new Date();
 
@@ -237,7 +233,7 @@ const SchedulePage: React.FC = () => {
       case "allowed_users":
         return getUsers(schedule.allowed_users);
       case "join_link":
-        return getAction(schedule, column);
+        return getAction(schedule);
       case "topic":
         return SelectedTopics(schedule.topic!);
       case "feedback":
@@ -279,7 +275,7 @@ const SchedulePage: React.FC = () => {
         getRowClassName={getRowClassName}
         searchFields={['level']}
         filterField="start_time"
-        itemsPerPage={itemsPerPage}
+        itemsPerPage={50}
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={handlePageChange}

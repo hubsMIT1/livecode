@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import ButtonUI from '../Button'
 import { useAuthActions } from '@/lib/authUtils'
-import { refreshToken } from '@/lib/api'
 const Profile:React.FC = ()=> {
   const {logoutUser} = useAuthActions()
 

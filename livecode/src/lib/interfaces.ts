@@ -167,35 +167,34 @@ export interface UserDetails {
   status?: boolean;
   // Add any other user details you want to store
 }
+export interface problemQueryProbs {
+  id:string;
+  topics:string | undefined;
+  level:string,
+  allowed_users:string[]
+}
 export interface Error {
   [key: string]: string | number | null
 }
 export interface ResponseProps {
   success: boolean;
   errors?: Error;
-  data?: Schedule | TopicData | Question | Solution | Sheet | Problem | TopicData[] | Question[] | Solution[] | Sheet[] | Schedule[] | Problem []
-  total?: number,
-  pageNumber?: number,
-  limitNumber?: number,
- 
-  totalPages?: number,
+  data?: Schedule | TopicData | Question | Solution | Sheet | Problem  | getAllResponse
+  problem?:Problem
+  
 }
 export interface ScheduleResponseProps{
   success: boolean;
   errors?: Error;
   data?: Schedule;
 }
-// export interface getAllResponse {
-//   success: boolean;
-//   data:{
-//     data:TopicData[] | Question[] | Solution[] | Sheet[] | Schedule[]
-//   }
-//   total:number,
-//   pageNumber:number,
-//   limitNumber:number,
-//   totalPages:number,
-//   errors?: Error;
-// }
+export interface getAllResponse {
+  data:TopicData[] | Question[] | Solution[] | Sheet[] | Schedule[] | Problem[]
+  total:number,
+  pageNumber:number,
+  limitNumber:number,
+  totalPages:number,
+}
 
 export interface ScheduleRecord {
   level: string;
@@ -234,7 +233,7 @@ export interface Schedule {
   question_slug?: string | null;
   owner?: User;
   question?: Question;
-  topic?: string[];
+  topic?: {title:string}[];
   feedback?: Feedback[];
   topicIds?: string[]
 }
