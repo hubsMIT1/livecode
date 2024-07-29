@@ -287,10 +287,16 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   };
   const stopStreaming = () => {
     if (localStream) {
-      localStream.getTracks().forEach(track => track.stop());
+      localStream.getTracks().forEach(track => {
+        track.stop();
+        localStream.removeTrack(track)
+      });
     }
     if (peerConnectionRef.current) {
       peerConnectionRef.current.getSenders().forEach(sender => {
+        if (sender.track) {
+          sender.track.stop();
+        }
         peerConnectionRef.current?.removeTrack(sender);
       });
     }
