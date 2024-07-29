@@ -12,7 +12,7 @@ interface GenericTableProps<T> {
   columns: Column[];
   filterOptions: FilterOption[];
   itemsPerPage?: number;
-  renderCell: (item: T, column: Column) => React.ReactNode;
+  renderCell: (item: T, column: Column) => any;
   getRowClassName?: (item: T) => string;
   searchFields?: (keyof T)[];
   filterField?: keyof T;

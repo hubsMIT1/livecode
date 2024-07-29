@@ -5,11 +5,10 @@
 
 import { handleCalledApi } from "./api";
 import {
-  getAllResponse,
+  problemQueryProbs,
   QuestionRecord,
   ResponseProps,
   ScheduleRecord,
-  ScheduleResponseProps,
   TopicRecord,
   updateContestProps,
 } from "./interfaces";
@@ -31,8 +30,8 @@ export const serviceApiAction = () => {
       console.log(res?.errors?.message);
       return res;
     }
-    const data = res.data
-    return data;
+    // const data = res.data
+    return res;
   };
   const getContestById = async (id: string): Promise<ResponseProps> => {
     const res = await handleCalledApi("GET", `end-user-service/schedule/${id}`);
@@ -76,12 +75,12 @@ export const serviceApiAction = () => {
     const res = await handleCalledApi("GET", `service/topic/${title}`);
     return res;
   };
-  const getAllTopics = async (page?:number,limit?:number): Promise<getAllResponse> => {
+  const getAllTopics = async (page?:number,limit?:number): Promise<ResponseProps> => {
     const res = await handleCalledApi("GET", `service/topics?page=${page}&limit=${limit}}`);
     if(res.errors){
       return res;
     }
-    return res.data;
+    return res;
   };
   const deleteTopic = async (id: string): Promise<ResponseProps> => {
     const res = await handleCalledApi("DELETE", `service/topic/${id}`);
@@ -125,11 +124,11 @@ export const serviceApiAction = () => {
     const res = await handleCalledApi("GET", `service/question/${slug}`);
     return res;
   };
-  const getAllQuestions = async (page?:number,limit?:number): Promise<getAllResponse> => {
+  const getAllQuestions = async (page?:number,limit?:number): Promise<ResponseProps> => {
     const res = await handleCalledApi("GET", `service/questions?page=${page}&limit=${limit}`);
     if(res.success){
       // console.log(res.data)
-      return res.data;
+      return res;
     }
     else {
       return res
@@ -139,12 +138,7 @@ export const serviceApiAction = () => {
     const res = await handleCalledApi("DELETE", `service/question/${id}`);
     return res;
   };
-  interface problemQueryProbs {
-    id:string;
-    topics:string | undefined;
-    level:string,
-    allowed_users:string[]
-  }
+
   const getNewRandomProblem = async({id,topics,level,allowed_users}:problemQueryProbs) =>{
     const users = allowed_users.join(',');
     console.log(id,topics,level,allowed_users,users,);

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import GenericTable from '../components/GenericTable';
-import { Problem, Column, filterOptions, columns, ResponseProps } from '../lib/interfaces';
+import { Problem, Column, filterOptions, columns, getAllResponse } from '../lib/interfaces';
 import { dataStructuresTopics } from '../api/constants';
-import { CircleCheckBig, CircleSlash, Ellipsis } from 'lucide-react';
+// import { CircleCheckBig, CircleSlash, Ellipsis } from 'lucide-react';
 import { serviceApiAction } from '../lib/endUserServicesApi';
 import { Slide, toast, ToastContainer } from 'react-toastify';
 import { SelectedTopics } from '@/components/HelperComponents';
@@ -12,14 +12,14 @@ const ProblemPage: React.FC = () => {
   const { getAllQuestions } = serviceApiAction();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(50);
+  // const [itemsPerPage, setItemsPerPage] = useState(50);
   const [problemsData, setProblemsData] = useState<Problem[] | []>([]);
   const [isLoading,setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchProblems = async () => {
       setIsLoading(true);
-      const res = await getAllQuestions(currentPage, itemsPerPage);
+      const res = await getAllQuestions(currentPage, 50);
       if (res.errors) {
         console.log(res?.errors?.message);
         toast.error(res?.errors?.message,{
@@ -37,12 +37,14 @@ const ProblemPage: React.FC = () => {
       else {
         setProblemsData([])
         console.log(res.data);
-        const data = res.data as Problem[];
+        const allData = res.data as getAllResponse;
+        const data = allData?.data as Problem[]
+
         data?.map((problem:Problem,index:number)=>
         {
           data[index].topic = problem.topic?.map((topic:any)=>topic.topic);
         })
-        setTotalPages(res?.totalPages || 1);
+        setTotalPages(allData?.totalPages || 1);
         setProblemsData(data);
       }
       setIsLoading(false);
@@ -51,7 +53,7 @@ const ProblemPage: React.FC = () => {
     if(!isLoading)
       fetchProblems();
 
-  }, [currentPage, itemsPerPage]);
+  }, [currentPage]);
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
@@ -105,7 +107,7 @@ const ProblemPage: React.FC = () => {
           renderCell={renderCell}
           searchFields={['title']}
           filterField="difficulty_level"
-          itemsPerPage={itemsPerPage}
+          itemsPerPage={50}
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={handlePageChange}

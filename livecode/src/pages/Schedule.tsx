@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import dayjs from 'dayjs';
+import React, {  useEffect } from 'react';
 import  TextContent from '../components/CreateContest'
 
-interface EventComponentProps {
-  scheduledTime: string; // ISO 8601 string
-}
+// interface EventComponentProps {
+//   scheduledTime: string; // ISO 8601 string
+// }
 
-const EventComponent: React.FC<EventComponentProps> = ({ scheduledTime }) => {
+const EventComponent: React.FC = () => {
  
   useEffect(()=>{
     document.title = 'Create Contest | Livecode'

@@ -2,12 +2,12 @@ import { Navigate, createBrowserRouter } from 'react-router-dom';
 import Layout from './pages/Layout';
 import App from './App';
 import ErrorPage from './pages/ErrorPage';
-import Contest from './pages/Contest';
+// import Contest from './pages/Contest';
 import EventComponent from './pages/Schedule'
 import ProblemPage from './pages/ProblemPage.tsx'
 import SchedulePage from './pages/UserSchedule.tsx'
 import FeedbackPage from './pages/Feedback.tsx'
-import PreMeetingPage from './pages/PreMeetingPage.tsx'
+// import PreMeetingPage from './pages/PreMeetingPage.tsx'
 import ContestFlow from './pages/ContestFlow.tsx';
 import Registration from './components/auth/Register.tsx';
 import Login from './components/auth/SignIn.tsx';
@@ -33,7 +33,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/schedule-contest',
-        element: <ProtectedRoute><EventComponent scheduledTime='' /></ProtectedRoute>,
+        element: <ProtectedRoute><EventComponent/></ProtectedRoute>,
       },
       {
         path: '/problems',

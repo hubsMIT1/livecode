@@ -127,6 +127,7 @@ export const handleCalledApi = async (
       return { success: false, errors: { message: response.error, status: response?.status } };
     }
     else if (response.data) {
+      console.log("response callapi",response,'\n\n', "data", response.data);
       return response.data;
     }
     return { success: false, errors: { general: 'An unexpected error occurred.' } };

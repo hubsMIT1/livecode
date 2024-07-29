@@ -13,7 +13,7 @@ import { useSocket } from "@/components/socketContext";
 import ButtonUI from "@/components/Button";
 import DraggableAvatar from "@/components/Draggable";
 import ToastDemo from "@/components/Toast";
-import { JoinStatusData, Schedule, TopicRecord } from "@/lib/interfaces";
+import { JoinStatusData, Schedule, UserDetails } from "@/lib/interfaces";
 import { getContentFromGithub } from "@/lib/api";
 import { serviceApiAction } from '../lib/endUserServicesApi'
 
@@ -22,10 +22,44 @@ function greet(name: string): string {
   return \`Hello, \${name}!\`;
 }`;
 
+
+interface EditorHeaderProps {
+  selectedLang: { value: string; label: string };
+  setSelectedLang: React.Dispatch<React.SetStateAction<{ value: string; label: string }>>;
+  DiscussProblem: () => void;
+  user: { username: string };
+  remoteUser: UserDetails;
+  gotDisReq: boolean;
+  acceptDisReq: (username: string | undefined) => void;
+  rejectDisReq: (username: string | undefined) => void;
+}
+
+interface ChatComponentProps {
+  chatStart: boolean;
+  localStream: MediaStream | null;
+  remoteStream: MediaStream | null;
+  remoteUser:UserDetails;
+  toggleAudio: () => void;
+  toggleVideo: () => void;
+  toggleRemoteAudio: () => void;
+  toggleRemoteVideo: () => void;
+}
+
+interface EditorFooterProps {
+  isLoading: boolean;
+  runTestCases: () => void;
+}
+
+// interface CodeResultComponentProps {
+//   isLoading: boolean;
+//   apiResponse: any;
+//   userInput: string;
+// }
+
 const defaultLang = { value: "javascript", label: "JavaScript" };
 
 export default function Contest() {
-  const { roomId, username, remote } = useParams<{
+  const { roomId } = useParams<{
     roomId: string;
     username: string;
     remote: string;
@@ -36,8 +70,8 @@ export default function Contest() {
   },[])
   // const [code, setCode] = useState(initialCode);
   const [selectedLang, setSelectedLang] = useState(defaultLang);
-  const [userInput, setUserInput] = useState("");
-  const [apiResponse, setApiResponse] = useState<any>(null);
+  // const [userInput, setUserInput] = useState("");
+  // const [apiResponse, setApiResponse] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [chatStart, setChatStart] = useState(false);
   const [requestSend, setRequestSend] = useState(false);
@@ -45,12 +79,8 @@ export default function Contest() {
   const [gotDisReq, setGotDisReq] = useState(false);
   const [problemDesc, setProblemDesc] = useState<string>('')
   const { getContestById, getNewRandomProblem } = serviceApiAction();
-  const [allowedUser, setAllowedUser] = useState<string[] | undefined>([])
+  // const [setAllowedUser] = useState<string[] | undefined>([])
 
-  const handleGetContest = () => {
-    // find contest 
-
-  }
   const getProblemDesc = async (path: string) => {
     const route = `${path}/problem.md`
 
@@ -74,8 +104,6 @@ export default function Contest() {
     toggleVideo,
     setRoomId,
     user,
-    setContestUser,
-    setRemoteUser,
     leaveRoom,
   } = useSocket();
 
@@ -87,14 +115,14 @@ export default function Contest() {
         setIsLoading(true);
         const res = await getContestById(roomId);
         if (res && res.success) {
-          const { data } = res;
+          const data = res.data as Schedule;
           console.log(res, res?.data, data)
           if (!data?.allowed_users.includes(user.username) || data?.allowed_users.length < 2) {
             navigate(`/contest/pre/${roomId}`);
             return;
           }
           if (data?.allowed_users) {
-            setAllowedUser(data?.allowed_users);
+            // setAllowedUser(data?.allowed_users);
             const rUser = Array.from(data?.allowed_users).find((name) => name !== user.username) || null;
             if (rUser && !remoteUser?.username) {
               remoteUser.username = rUser;
@@ -107,14 +135,18 @@ export default function Contest() {
             const topics = data?.topic?.map((topic: any) => topic.topic?.topic_id).join(',');
             // console.log(topics);
             const res = await getNewRandomProblem({ id: roomId, topics: topics, level: data.level, allowed_users: data.allowed_users })
-            if (res.success) {
-              const problem = res?.problem;
+            // interface randomProblemProps {
+            //   success:boolean; 
+            //   problem:Problem
+            // };
+            const problem = res?.problem
+            if (res.success && problem) {
               if (problem.slug) {
                 getProblemDesc(problem.slug)
               }
             }
             else {
-              console.log(res.errors.message)
+              console.log(res?.errors?.message)
             }
           } else {
             getProblemDesc(data?.question_slug!);
@@ -160,7 +192,7 @@ export default function Contest() {
 
   const handlerUserInput = useCallback((input: string) => {
       console.log(input)
-    // setUserInput(input);
+      // setUserInput(input);
   }, []);
 
   const runTestCases = useCallback(async () => {
@@ -277,8 +309,8 @@ export default function Contest() {
     content: (
       <CodeResultComponent
         isLoading={isLoading}
-        apiResponse={apiResponse}
-        userInput={userInput}
+        apiResponse={null}
+        userInput={''}
       />
     ),
   };
@@ -367,7 +399,7 @@ function EditorHeader({
   gotDisReq,
   acceptDisReq,
   rejectDisReq,
-}:{selectedLang:any,setSelectedLang:any}) {
+}:EditorHeaderProps) {
   return (
     <div className="flex justify-between pr-4 mb-2">
       {gotDisReq && (
@@ -415,7 +447,7 @@ function ChatComponent({
   toggleVideo,
   toggleRemoteAudio,
   toggleRemoteVideo,
-}) {
+}:ChatComponentProps) {
   if (!chatStart) return null;
 
   return (
@@ -440,7 +472,7 @@ function ChatComponent({
   );
 }
 
-function EditorFooter({ isLoading, runTestCases }:{isLoading:boolean,runTestCases:()=>void}) {
+function EditorFooter({ isLoading, runTestCases }:EditorFooterProps) {
   return (
     <div className="flex justify-end gap-5">
       <button
