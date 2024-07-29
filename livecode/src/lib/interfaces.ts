@@ -185,17 +185,16 @@ export interface ScheduleResponseProps{
   errors?: Error;
   data?: Schedule;
 }
-// export interface getAllResponse {
-//   success: boolean;
-//   data:{
-//     data:TopicData[] | Question[] | Solution[] | Sheet[] | Schedule[]
-//   }
-//   total:number,
-//   pageNumber:number,
-//   limitNumber:number,
-//   totalPages:number,
-//   errors?: Error;
-// }
+export interface getAllResponse {
+  success: boolean;
+  results?:TopicData[] | Question[] | Solution[] | Sheet[] | Schedule[]
+  
+  total:number,
+  pageNumber:number,
+  limitNumber:number,
+  totalPages:number,
+  errors?: Error;
+}
 
 export interface ScheduleRecord {
   level: string;

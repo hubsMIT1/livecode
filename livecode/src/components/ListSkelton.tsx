@@ -1,8 +1,4 @@
-import Typewriter from "./TypeWriter";
 
-interface ListSkeletonProps {
-    title?: string;
-}
 const SkeletonItem = () => (
     <div className="flex w-90 items-center justify-between pt-4 first:pt-0">
       <div>

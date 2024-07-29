@@ -5,6 +5,7 @@
 
 import { handleCalledApi } from "./api";
 import {
+  getAllResponse,
   QuestionRecord,
   ResponseProps,
   ScheduleRecord,
@@ -30,9 +31,10 @@ export const serviceApiAction = () => {
       console.log(res?.errors?.message);
       return res;
     }
-    return res.data;
+    const data = res.data
+    return data;
   };
-  const getContestById = async (id: string): Promise<ScheduleResponseProps> => {
+  const getContestById = async (id: string): Promise<ResponseProps> => {
     const res = await handleCalledApi("GET", `end-user-service/schedule/${id}`);
     console.log("endserveic api get schedule",res);
     return res;
@@ -74,7 +76,7 @@ export const serviceApiAction = () => {
     const res = await handleCalledApi("GET", `service/topic/${title}`);
     return res;
   };
-  const getAllTopics = async (page?:number,limit?:number): Promise<ResponseProps> => {
+  const getAllTopics = async (page?:number,limit?:number): Promise<getAllResponse> => {
     const res = await handleCalledApi("GET", `service/topics?page=${page}&limit=${limit}}`);
     if(res.errors){
       return res;
@@ -123,7 +125,7 @@ export const serviceApiAction = () => {
     const res = await handleCalledApi("GET", `service/question/${slug}`);
     return res;
   };
-  const getAllQuestions = async (page?:number,limit?:number): Promise<ResponseProps> => {
+  const getAllQuestions = async (page?:number,limit?:number): Promise<getAllResponse> => {
     const res = await handleCalledApi("GET", `service/questions?page=${page}&limit=${limit}`);
     if(res.success){
       // console.log(res.data)

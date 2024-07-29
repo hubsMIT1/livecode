@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 
 import { TopicData } from "@/lib/interfaces";
-import { time } from "console";
 import { useLocation } from "react-router-dom";
 import { serviceApiAction } from "@/lib/endUserServicesApi";
 import { useRecoilState } from "recoil";

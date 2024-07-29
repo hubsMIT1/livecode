@@ -59,7 +59,8 @@ const VideoComponent: React.FC<VideoComponentProps> = ({ stream,onToggleAudio,on
     }
     // Handle audio toggle logic here
   };
-
+  if(!1) console.log(stream);
+  
   const handleToggleVideo = () => {
     setVideoEnabled(!videoEnabled);
     onToggleVideo();
@@ -79,7 +80,9 @@ const VideoComponent: React.FC<VideoComponentProps> = ({ stream,onToggleAudio,on
         videoConstraints={{ facingMode: 'user' }}
         className= "min-w-60 lg:w-80 bg-gray-500 "
         style={{ transform: 'scaleX(-1)' }}
-        videoStream={stream}
+        // videoStream={stream}
+        onUserMedia={(stream)=>stream}
+        
       />
       <VideoControls
         audioEnabled={audioEnabled}

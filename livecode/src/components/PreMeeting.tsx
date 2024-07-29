@@ -5,13 +5,11 @@ import { VideoComponent, RemoteVideoComponent } from "./VideoView";
 import ButtonUI from "./Button";
 import AgreementPage from "./condition";
 import { useSocket } from "./socketContext";
-import { JoinRequestData, JoinStatusData } from '../lib/interfaces';
-import { serviceApiAction } from '../lib/endUserServicesApi'
-import { User } from "lucide-react";
+import {  JoinStatusData } from '../lib/interfaces';
 
 const Meeting: React.FC = () => {
-  const { roomId, username, remote } = useParams<{ roomId: string; username: string; remote: string }>();
-  const [joinStatus, setJoinStatus] = useState<string>("");
+  const { roomId } = useParams<{ roomId: string; username: string; remote: string }>();
+  // const [joinStatus, setJoinStatus] = useState<string>("");
   const [pendingUsers, setPendingUsers] = useState<string[]>([]);
   const [toast, setToast] = useState<string | null>(null);
   const [isOwnerJoined, setIsOwnerJoined] = useState<boolean>(false);
@@ -29,13 +27,9 @@ const Meeting: React.FC = () => {
     toggleRemoteVideo,
     handleUserLeft,
     remoteUser,
-    setRemoteUser,
     setRoomId,
     setIsOwner,
     isOwner,
-    contestUser,
-    setContestUser,
-    stopStreaming,
     initializeWebRTC,
     user,
   } = useSocket();
@@ -77,7 +71,7 @@ const Meeting: React.FC = () => {
   }, [socket, roomId]);
 
   const handleJoinStatus = async (data: JoinStatusData) => {
-    setJoinStatus(data.status);
+    // setJoinStatus(data.status);
     console.log(data.status, data.isOwner, isOwner);
     if (data.status === "joined") {
 

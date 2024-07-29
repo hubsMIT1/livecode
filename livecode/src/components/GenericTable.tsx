@@ -1,14 +1,11 @@
 // components/GenericTable.tsx
-import React, { useState, useMemo, useEffect } from 'react';
-import { Column, FilterOption, Topic, TopicData } from '../lib/interfaces';
+import React, { useState, useMemo } from 'react';
+import { Column, FilterOption, Topic } from '../lib/interfaces';
 import Search from '@/components/Search';
 import Filter from '@/components/Filter';
 import Pagination from '@/components/Pagination';
 import DropdownMenu from '@/components/DropMenu';
 import ListSkeleton from './ListSkelton';
-import { topicState } from "@/state/TSQState";
-import { useRecoilState } from 'recoil';
-import { serviceApiAction } from "@/lib/endUserServicesApi";
 
 interface GenericTableProps<T> {
   initialData: T[];
@@ -37,7 +34,6 @@ function GenericTable<T extends { question_id?: string,schedule_id?:string}>({
   searchFields = ['title' as keyof T,'question' as keyof T,'topic' as keyof T],
   filterField = 'difficulty' as keyof T,
   topicDrop,
-  topicDropItem,
   currentPage,
   totalPages,
   onPageChange,

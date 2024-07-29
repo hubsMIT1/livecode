@@ -1,15 +1,15 @@
-import React,{useEffect, useState} from "react";
+import React,{ useState} from "react";
 import EventDetails from "./SelectDateTime";
-import { dataStructuresTopics, difficultyOptions, unavailableTimes } from "@/api/constants";
+import {difficultyOptions, unavailableTimes } from "@/api/constants";
 import Topics from "./Topics";
 import DifficultySelection from "./DifficultyLevel";
 import BottonUI from "./Button";
-import { ScheduleRecord, TopicData, updateContestProps } from "@/lib/interfaces";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { ScheduleRecord,  updateContestProps } from "@/lib/interfaces";
+// import { useRecoilState, useRecoilValue } from "recoil";
 import { serviceApiAction } from "@/lib/endUserServicesApi";
 import { Slide, ToastContainer, toast } from "react-toastify";
 import ButtonSkeleton from "./ButtonSkelton";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const TextContent: React.FC = () => {
     // const {edit,id} = useParams();
@@ -25,7 +25,7 @@ const TextContent: React.FC = () => {
     // const [topics,setTopics] = useRecoilState(topicState);
     const [isLoading,setIsLoading] = useState(false);
     const {createContest,updateContest} = serviceApiAction();
-    const [editId,setEditId] = useState<string | undefined>(undefined)
+    // const [editId,setEditId] = useState<string | undefined>(undefined)
 
   
     // console.log(topics)

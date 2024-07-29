@@ -3,13 +3,13 @@ import { userState, tokenState} from '@/state/authState';
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
 import io, { Socket } from 'socket.io-client';
-import {AnswerData,OfferData,IceCandidateData,User,UserDetails,UserLeftData,JoinStatusData,NoUserData} from '../lib/interfaces'
+import {AnswerData,OfferData,IceCandidateData,User,UserDetails,JoinStatusData,NoUserData} from '../lib/interfaces'
 import { API_URL } from '@/api/constants';
 // import { useParams } from 'react-router-dom';
 
 interface SocketContextType {
   socket: Socket | null;
-  connectSocket: (userId: string) => void;
+  connectSocket: (token: string,roomId:string) => void;
   disconnectSocket: () => void;
   remoteStream: MediaStream | null;
   setRemoteStream: React.Dispatch<React.SetStateAction<MediaStream | null>>;
@@ -22,7 +22,7 @@ interface SocketContextType {
   handleIceCandidate: (data: IceCandidateData) => void;
   leaveRoom: (isLeave?: boolean) => void;
   checkAndStartStreaming: () => void;
-  handleUserLeft: (data: UserLeftData) => void;
+  handleUserLeft: (data: JoinStatusData) => void;
   initializeWebRTC: (roomId:string) => Promise<void>;
   toggleAudio: () => void;
   toggleVideo: () => void;
@@ -30,13 +30,13 @@ interface SocketContextType {
   toggleRemoteVideo: () => void;
   setRoomId: React.Dispatch<React.SetStateAction<string | undefined>>;
   remoteUser:UserDetails;
-  setRemoteUser: React.Dispatch<React.SetStateAction<UserDetails | null>>;
+  setRemoteUser: React.Dispatch<React.SetStateAction<UserDetails>>;
   isOwner:boolean;
   setIsOwner: React.Dispatch<React.SetStateAction<boolean>>;
-  roomId:string;
+  roomId:string | undefined;
   user:User;
-  setContestUser: React.Dispatch<React.SetStateAction<string | undefined>>;
-  contestUser:string;
+  contestUser: string | null;
+  setContestUser: React.Dispatch<React.SetStateAction<string | null>>;
   startStreaming:() =>void;
   stopStreaming: () => void;
 }
@@ -60,7 +60,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   // const {username} = useParams()
   const user:User = useRecoilValue(userState)!;
   const token = useRecoilValue(tokenState)
-  const [roomId,setRoomId] = useState<string>()
+  const [roomId,setRoomId] = useState<string | undefined>()
   
   useEffect(()=>{
     console.warn(user,"users in scoket")

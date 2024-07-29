@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import io, { Socket } from 'socket.io-client';
 
 interface User {
@@ -15,7 +15,6 @@ interface CursorPosition {
 
 const Editor: React.FC = () => {
   const { roomId,username } = useParams<{ roomId: string,username:string}>();
-  const location = useLocation();
   const navigate = useNavigate();
 //   const userName = (location.state as any)?.userName;
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -83,7 +82,7 @@ const Editor: React.FC = () => {
     socket?.emit('content-change', newContent);
   };
 
-  const handleCursorMove = (e: React.MouseEvent<HTMLTextAreaElement>) => {
+  const handleCursorMove = () => {
     if (textareaRef.current) {
       const cursorPosition = textareaRef.current.selectionStart;
       console.log(cursorPosition)

@@ -41,26 +41,26 @@ const ButtonUI: React.FC<ButtonProps> = ({ title, handleSubmit, color = 'indigo'
 export default ButtonUI;
 
 
-interface bottonProps{
-  title:string;
-  handleSubmit:()=>void;
-  color?:string;
-}
-const BottonUI: React.FC<bottonProps> = ({title,handleSubmit,color}) => {
-// color = color || 'indigo-600';
-console.log(color)
-return (
-  <div>
-    <a
-      className={`group relative cursor-pointer inline-block overflow-hidden border ${`border-`+color} px-8 py-3 focus:outline-none focus:ring`}
-      onClick={handleSubmit}
-    >
-      <span className={`absolute inset-y-0 left-0 w-[2px] ${'bg-'+color} transition-all group-hover:w-full group-active:bg-${color}`}></span>
+// interface bottonProps{
+//   title:string;
+//   handleSubmit:()=>void;
+//   color?:string;
+// }
+// const BottonUI: React.FC<bottonProps> = ({title,handleSubmit,color}) => {
+// // color = color || 'indigo-600';
+// console.log(color)
+// return (
+//   <div>
+//     <a
+//       className={`group relative cursor-pointer inline-block overflow-hidden border ${`border-`+color} px-8 py-3 focus:outline-none focus:ring`}
+//       onClick={handleSubmit}
+//     >
+//       <span className={`absolute inset-y-0 left-0 w-[2px] ${'bg-'+color} transition-all group-hover:w-full group-active:bg-${color}`}></span>
 
-      <span className={`relative text-sm font-medium ${'text-'+color} transition-colors group-hover:text-white`}>
-        {title}
-      </span>
-    </a>
-  </div>
-);
-};
+//       <span className={`relative text-sm font-medium ${'text-'+color} transition-colors group-hover:text-white`}>
+//         {title}
+//       </span>
+//     </a>
+//   </div>
+// );
+// };
