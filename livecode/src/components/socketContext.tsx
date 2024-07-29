@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, useEffect, useRef } from 'r
 import { useRecoilValue } from 'recoil';
 import io, { Socket } from 'socket.io-client';
 import {AnswerData,OfferData,IceCandidateData,User,UserDetails,JoinStatusData,NoUserData} from '../lib/interfaces'
-import { API_URL } from '@/api/constants';
+// import { API_URL } from '@/api/constants';
 // import { useParams } from 'react-router-dom';
 
 interface SocketContextType {
@@ -93,7 +93,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   }, [socket]);
 
   const connectSocket = (token: string,roomId:string) => {
-    const newSocket = io(API_URL, {
+    const newSocket = io(import.meta.env.VITE_API_URL, {
       auth: { token: token,roomId:roomId},
       reconnection: true,
       reconnectionAttempts: 5,
