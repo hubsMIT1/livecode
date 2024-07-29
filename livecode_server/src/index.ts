@@ -15,7 +15,7 @@ import morgan from 'morgan';
 import { createUser, loginUser, refreshToken } from './controllers/user.controllers';
 
 const corsOptions = {
-  origin: ["http://localhost:5173", "https://localhost:5173","https://livecode-gamma.vercel.app", "https://192.168.204.138:5173", "http://192.168.100.100:5173", "https://4f9e-152-58-155-49.ngrok-free.app"],
+  origin: ["http://localhost:5173", "https://localhost:5173","https://livecodes.vercel.app", "https://192.168.204.138:5173", "http://192.168.100.100:5173", "https://4f9e-152-58-155-49.ngrok-free.app"],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true
 };
@@ -111,7 +111,7 @@ app.use('/api/end-user-service', endUserServer);
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:5173", "https://localhost:5173",'https://livecode-gamma.vercel.app', "https://192.168.204.138:5173", "http://192.168.100.100:5173", "https://4f9e-152-58-155-49.ngrok-free.app", "*"],
+    origin: ["http://localhost:5173", "https://localhost:5173",'https://livecodes.vercel.app', "https://192.168.204.138:5173", "http://192.168.100.100:5173", "https://4f9e-152-58-155-49.ngrok-free.app", "*"],
     methods: ['*'],
     credentials:true,
   },
